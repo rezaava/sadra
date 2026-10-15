@@ -1,0 +1,327 @@
+/* public/css/admin/categories.css
+   Page-specific styles for the admin categories & subcategories management page.
+   Uses the same design tokens as the rest of the admin panel (index.css).
+*/
+
+:root {
+    --white: #ffffff;
+    --cream: #F2ECDE;
+    --cream-2: #EAE1CC;
+    --black: #1B1B1A;
+    --steel: #7C8B90;
+    --steel-dark: #57646A;
+    --text-muted: #6b6b66;
+}
+
+/* ---------- Page head ---------- */
+.content-head-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.6rem;
+}
+
+.content-title {
+    font-weight: 800;
+    font-size: 1.5rem;
+    margin: 0;
+}
+
+.content-sub {
+    font-size: .85rem;
+    color: var(--text-muted);
+    margin-top: .2rem;
+}
+
+/* ---------- Flash messages ---------- */
+.alert-strip {
+    border-radius: 10px;
+    padding: .8rem 1.1rem;
+    font-size: .86rem;
+    font-weight: 600;
+    margin-bottom: 1.3rem;
+}
+
+.alert-strip.success {
+    background: #EAF3E9;
+    color: #3A7A3D;
+}
+
+.alert-strip.error {
+    background: #FAE9E7;
+    color: #B23B2E;
+}
+
+/* ---------- Category list ---------- */
+.cat-manage-list {
+    display: flex;
+    flex-direction: column;
+    gap: .9rem;
+}
+
+.cat-manage-card {
+    border: 1px solid #eee2c8;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.cat-manage-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: .8rem;
+    padding: 1rem 1.2rem;
+    cursor: pointer;
+    background: var(--white);
+    transition: background .15s ease;
+}
+
+.cat-manage-head:hover {
+    background: #FBF8F0;
+}
+
+.cat-manage-info {
+    display: flex;
+    align-items: center;
+    gap: .9rem;
+}
+
+.cat-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background: var(--black);
+    color: var(--cream);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.15rem;
+    flex-shrink: 0;
+}
+
+.cat-name {
+    font-weight: 800;
+    font-size: .95rem;
+}
+
+.cat-meta {
+    font-size: .76rem;
+    color: var(--text-muted);
+    margin-top: .1rem;
+}
+
+.cat-manage-actions {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+}
+
+.icon-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    border: 1.5px solid #e6dcc0;
+    background: var(--white);
+    color: var(--steel-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .92rem;
+}
+
+.icon-btn:hover {
+    background: var(--black);
+    border-color: var(--black);
+    color: var(--white);
+}
+
+.icon-btn.danger:hover {
+    background: #B23B2E;
+    border-color: #B23B2E;
+    color: var(--white);
+}
+
+.expand-caret {
+    color: var(--steel-dark);
+    font-size: .9rem;
+    transition: transform .25s ease;
+    margin-right: .2rem;
+}
+
+.cat-manage-head[aria-expanded="true"] .expand-caret {
+    transform: rotate(180deg);
+}
+
+/* ---------- Subcategory rows ---------- */
+.subcat-list {
+    background: #FBF8F0;
+    padding: .4rem 1.2rem 1rem;
+    border-top: 1px solid #f1e9cf;
+}
+
+.subcat-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: .65rem .2rem;
+    border-bottom: 1px dashed #eee2c8;
+}
+
+.subcat-row:last-of-type {
+    border-bottom: none;
+}
+
+.subcat-name {
+    flex: 1;
+    min-width: 160px;
+    font-size: .87rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+}
+
+.subcat-name i {
+    color: var(--steel);
+}
+
+.subcat-count {
+    font-size: .78rem;
+    color: var(--text-muted);
+    width: 90px;
+    flex-shrink: 0;
+}
+
+.subcat-actions {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    flex-shrink: 0;
+}
+
+.empty-subcat-note {
+    font-size: .82rem;
+    color: var(--text-muted);
+    padding: .6rem .2rem;
+}
+
+.add-subcat-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    margin-top: .6rem;
+    background: transparent;
+    border: 1.5px dashed #cabb8e;
+    color: var(--steel-dark);
+    font-size: .82rem;
+    font-weight: 700;
+    border-radius: 8px;
+    padding: .5rem .9rem;
+    width: 100%;
+    justify-content: center;
+}
+
+.add-subcat-btn:hover {
+    background: var(--white);
+    border-style: solid;
+    border-color: var(--black);
+    color: var(--black);
+}
+
+/* ---------- Empty state ---------- */
+.empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--text-muted);
+}
+
+.empty-state i {
+    font-size: 2rem;
+    color: var(--steel);
+    display: block;
+    margin-bottom: .7rem;
+}
+
+.empty-state p {
+    font-size: .9rem;
+    margin: 0;
+}
+
+/* ---------- Delete confirm modal ---------- */
+.delete-icon-circle {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #FAE9E7;
+    color: #B23B2E;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    margin: 0 auto;
+}
+
+.btn-delete-confirm {
+    background: #B23B2E;
+    color: var(--white);
+    border: 1.5px solid #B23B2E;
+    font-weight: 700;
+    border-radius: 8px;
+    padding: .5rem 1.2rem;
+    font-size: .88rem;
+}
+
+.btn-delete-confirm:hover {
+    background: #8f2e24;
+    border-color: #8f2e24;
+    color: var(--white);
+}
+
+/* ---------- Form controls inside modals ---------- */
+.modal .form-label {
+    font-weight: 700;
+    font-size: .86rem;
+    margin-bottom: .4rem;
+}
+
+.modal .form-control,
+.modal .form-select {
+    border: 1.5px solid #e6dcc0;
+    border-radius: 9px;
+    padding: .6rem .85rem;
+    font-size: .88rem;
+}
+
+.modal .form-control:focus,
+.modal .form-select:focus {
+    outline: none;
+    border-color: var(--black);
+    box-shadow: none;
+}
+
+.modal .form-control:disabled {
+    background: #F7F3E9;
+    color: var(--text-muted);
+}
+
+.modal-content {
+    border-radius: 14px;
+    border: none;
+}
+
+.modal-header,
+.modal-footer {
+    border-color: #eee2c8;
+}
+
+@media (max-width:767.98px) {
+    .subcat-row {
+        flex-wrap: wrap;
+    }
+
+    .subcat-count {
+        width: auto;
+    }
+}
