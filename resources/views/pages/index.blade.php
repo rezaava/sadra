@@ -242,7 +242,7 @@
     <section class="process" id="process">
         <div class="wrap">
             <div class="section-head reveal">
-                <h2>فرآیند کار</h2>
+                <h2>فرآیند سفارش گذاری</h2>
                 <p class="section-note">یک مسیر مشخص و قابل پیش‌بینی، از شناخت برند تا آماده‌سازی برای تولید.</p>
             </div>
 
@@ -289,6 +289,7 @@
             </svg>
 
             <svg class="drift drift-4" viewBox="0 0 100 100">
+
                 <path d="M50 8 L92 50 L50 92 L8 50 Z" fill="none" stroke="#cdb18e" stroke-width="1.4" />
             </svg>
         </div>
@@ -485,6 +486,80 @@
 @endsection
 
 @section('js')
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const marquee = document.querySelector('.marquee');
+            const track = marquee?.querySelector('.marquee-track');
+
+            if (!marquee || !track) return;
+
+            const speed = 50;
+            const originalItems = Array.from(track.children).map(item => item.cloneNode(true));
+
+            let position = 0;
+            let lastTime = 0;
+            let frameId;
+            let paused = false;
+
+            function setup() {
+                cancelAnimationFrame(frameId);
+                track.innerHTML = '';
+
+                for (let i = 0; i < 10; i++) {
+                    originalItems.forEach(item => {
+                        track.appendChild(item.cloneNode(true));
+                    });
+                }
+
+                position = 0;
+                lastTime = 0;
+                track.style.transform = 'translateX(0px)';
+
+                frameId = requestAnimationFrame(animate);
+            }
+
+            function animate(time) {
+                if (paused) return;
+
+                if (!lastTime) lastTime = time;
+
+                const delta = Math.min((time - lastTime) / 1000, 0.05);
+                lastTime = time;
+
+                position += speed * delta;
+
+                while (track.firstElementChild) {
+                    const first = track.firstElementChild;
+                    const gap = parseFloat(getComputedStyle(track).gap) || 0;
+                    const itemWidth = first.getBoundingClientRect().width;
+                    const totalWidth = itemWidth + gap;
+
+                    if (-position < totalWidth) break;
+
+                    position += totalWidth;
+                    track.appendChild(first);
+                }
+
+                track.style.transform = `translateX(${position}px)`;
+                frameId = requestAnimationFrame(animate);
+            }
+
+            marquee.addEventListener('mouseenter', () => {
+                paused = true;
+                cancelAnimationFrame(frameId);
+            });
+
+            marquee.addEventListener('mouseleave', () => {
+                paused = false;
+                lastTime = 0;
+                frameId = requestAnimationFrame(animate);
+            });
+
+            window.addEventListener('resize', setup);
+
+            setup();
+        });
+    </script>
+
     <script src="{{ asset('asset/js/script.js') }}"></script>
 @endsection
-

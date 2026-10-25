@@ -156,7 +156,7 @@
                         <div class="quote-field">
                             <label for="quoteEmail">ایمیل</label>
                             <input type="email" id="quoteEmail" name="email" value="{{ old('email') }}"
-                                placeholder="example@email.com" required>
+                                placeholder="example@email.com">
                             @error('email')
                                 <span class="quote-field-error">{{ $message }}</span>
                             @enderror
@@ -204,10 +204,12 @@
                             <select id="quoteQuantity" name="quantity" required>
                                 <option value="" disabled @selected(!old('quantity'))>یک بازه را انتخاب کنید
                                 </option>
-                                <option value="lt1000" @selected(old('quantity') === 'lt1000')>زیر ۱٬۰۰۰ عدد</option>
-                                <option value="1k-5k" @selected(old('quantity') === '1k-5k')>۱٬۰۰۰ تا ۵٬۰۰۰ عدد</option>
-                                <option value="5k-20k" @selected(old('quantity') === '5k-20k')>۵٬۰۰۰ تا ۲۰٬۰۰۰ عدد</option>
-                                <option value="gt20k" @selected(old('quantity') === 'gt20k')>بالای ۲۰٬۰۰۰ عدد</option>
+                                <option value="lt1000" @selected(old('quantity') === 'lt300')>کمتر از ۳۰۰</option>
+                                <option value="1k-5k" @selected(old('quantity') === '1k-5k')>۳۰۰ تا ۵٬۰۰۰ عدد</option>
+                                <option value="5k-20k" @selected(old('quantity') === '5k-10k')>۵٬۰۰۰ تا ۱۰٬۰۰۰ عدد</option>
+                                <option value="5k-20k" @selected(old('quantity') === '10k-20k')>۱۰٬۰۰۰ تا ۲۰٬۰۰۰ عدد</option>
+                                <option value="5k-20k" @selected(old('quantity') === '20k-50k')>۲۰٬۰۰۰ تا ۵۰٬۰۰۰ عدد</option>
+                                <option value="gt20k" @selected(old('quantity') === 'gt50k')>بالای ۵۰٬۰۰۰ عدد</option>
                             </select>
                             @error('quantity')
                                 <span class="quote-field-error">{{ $message }}</span>
@@ -227,16 +229,16 @@
                             @enderror
                         </div>
                         <div class="quote-field">
-                            <label for="quoteDimensions">ابعاد تقریبی <span class="opt">(اختیاری)</span></label>
+                            <label for="quoteDimensions">ابعاد تقریبی </label>
                             <input type="text" id="quoteDimensions" name="dimensions"
-                                value="{{ old('dimensions') }}" placeholder="مثلاً: ۲۰×۱۵×۱۰ سانتی‌متر">
+                                value="{{ old('dimensions') }}" placeholder="مثلاً: ۲۰×۱۵×۱۰ سانتی‌متر" required>
                             @error('dimensions')
                                 <span class="quote-field-error">{{ $message }}</span>
                             @enderror
                         </div>
                         <div class="quote-field">
-                            <label for="quoteSheet">ترتیب ورق <span class="opt">(اختیاری)</span></label>
-                            <select id="quoteSheet" name="sheet">
+                            <label for="quoteSheet">ترتیب ورق</label>
+                            <select id="quoteSheet" name="sheet" required>
                                 <option value="" @selected(!old('sheet'))>انتخاب کنید</option>
                                 <option value="3-layer" @selected(old('sheet') === '3-layer')>۳ لایه</option>
                                 <option value="5-layer" @selected(old('sheet') === '5-layer')>۵ لایه</option>

@@ -14,11 +14,7 @@ class AboutController extends Controller
         $about = About::first();
 
         $stats = AboutStat::orderBy('order')->get();
-
-        $values = AboutValue::orderBy('order')->get();
-
-        $steps = AboutStep::orderBy('order')->get();
-
-        return view('pages.about', compact('about','stats','values','steps'));
+  
+        return view('pages.about', compact('about','stats'));
     }
 }

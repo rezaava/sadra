@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('brand');
-            $table->string('email');
+            $table->string('email')->nullable();
             $table->string('phone', 30);
             $table->string('category');
             $table->string('sheet');

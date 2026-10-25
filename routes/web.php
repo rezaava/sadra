@@ -6,9 +6,10 @@ use App\Http\Controllers\Admin\BlogController as AdminBlogController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\ServiceCategoryController as AdminServiceCategoryController;
 use App\Http\Controllers\Admin\ServiceController as AdminServiceController;
+use App\Http\Controllers\AdminBrandController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\BlogPostController;
-use App\Http\Controllers\AdminBrandController;
+use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\IntroController;
 use App\Http\Controllers\JoinController;
@@ -28,7 +29,7 @@ Route::get('/services/{id}', [ServicesController::class, 'index'])->name('servic
 Route::get('/products', [ProductsController::class, 'index'])->name('products');
 Route::get('/product/{id}', [ProductController::class, 'index'])->name('product');
 Route::get('/blog', [BlogController::class, 'index'])->name('blog');
-Route::get('/blog/{id}', [BlogPostController::class, 'inwwwdex'])->name('blog.post');
+Route::get('/blog/{id}', [BlogPostController::class, 'index'])->name('blog.post');
 Route::get('/quote', [QuoteController::class, 'index'])->name('quote');
 Route::post('/quote', [QuoteController::class, 'store'])->name('quote.store');
 Route::get('/join', [JoinController::class, 'index'])->name('join');
@@ -94,6 +95,12 @@ Route::prefix('admin')->middleware('auth')->name('admin.')->group(function () {
         Route::post('/', [AdminBrandController::class, 'store'])->name('store');
         Route::post('/{brand}', [AdminBrandController::class, 'update'])->name('update');
         Route::delete('/{brand}', [AdminBrandController::class, 'destroy'])->name('destroy');
+    });
+    Route::prefix('categories')->name('categories.')->group(function () {
+        Route::get('/', [AdminCategoryController::class, 'index'])->name('index');
+        Route::post('/', [AdminCategoryController::class, 'store'])->name('store');
+        Route::post('/{category}', [AdminCategoryController::class, 'update'])->name('update');
+        Route::delete('/{category}', [AdminCategoryController::class, 'destroy'])->name('destroy');
     });
     Route::post('/video', [AdminController::class, 'uploadVideo'])->name('video.upload');
     Route::delete('/video', [AdminController::class, 'deleteVideo'])->name('video.delete');

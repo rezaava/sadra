@@ -52,6 +52,12 @@
                 محصولات
             </a>
 
+            <a href="{{ route('admin.categories.index') }}"
+                class="{{ request()->routeIs('admin.categories.*') ? 'active' : '' }}">
+                <i class="bi bi-journal-text"></i>
+                دسته بندی
+            </a>
+
             {{-- برندها --}}
             <a href="{{ route('admin.brands.index') }}"
                 class="{{ request()->routeIs('admin.brands.*') ? 'active' : '' }}">

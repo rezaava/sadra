@@ -272,6 +272,7 @@ class DatabaseSeeder extends Seeder
         $brand = new Brand();
 
         $brand->name = $name;
+        $brand->img = 'iajsojiaw';
 
         $brand->save();
     }

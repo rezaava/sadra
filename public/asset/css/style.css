@@ -1168,11 +1168,8 @@ section {
   align-items: center;
   gap: 64px;
   padding-inline-end: 64px;
-  animation: marquee 30s linear infinite;
 }
-.marquee:hover .marquee-track {
-  animation-play-state: paused;
-}
+
 .brand-logo {
   font-family: "Fraunces", serif;
   font-size: 1.4rem;
@@ -1565,7 +1562,7 @@ section {
 
 .process-list {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 30px;
   position: relative;
   z-index: 1;

@@ -55,7 +55,7 @@
                 SADRA. — PACKAGING STUDIO
             </span>
             <div class="intro-title-wrap">
-                <h1 class="intro-title">صدرا <span class="accent-grad">کو</span></h1>
+                <h1 class="intro-title">صنایع بسته‌بندی <span class="accent-grad">صدرا</span></h1>
             </div>
             <p class="intro-tagline">جایی که بسته‌بندی از یک ایده ساده، به تجربه‌ای می‌رسد که برند شما را به یاد ماندنی می‌کند.</p>
             <button class="intro-cta" id="introEnterBtn" data-href="{{ route('home') }}" type="button">

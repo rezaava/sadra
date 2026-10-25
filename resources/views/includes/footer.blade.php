@@ -1,4 +1,19 @@
 <style>
+    .footer-brand .footer-map {
+        width: 100%;
+        max-width: 320px;
+        margin-top: 12px;
+        overflow: hidden;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .footer-brand .footer-map iframe {
+        display: block;
+        width: 100%;
+        height: 180px;
+    }
+
     .footer-subsidiaries .subsidiary-item {
         display: flex;
         flex-direction: column;
@@ -47,6 +62,15 @@
             <div class="footer-brand">
                 <div class="brand-name-fa">صدرا</div>
                 <p>استودیوی طراحی بسته‌بندی صدرا؛ همراه برندها از ایده تا تولید.</p>
+                <div class="footer-brand">
+                    <div class="brand-name-fa">صدرا</div>
+                    <div class="footer-map">
+                        <iframe src="https://www.google.com/maps?q=میدان+قرآن،+بلوار+خاتم،+یزد&output=embed"
+                            width="100%" height="180" style="border:0;" allowfullscreen loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade" title="موقعیت شرکت صدرا در یزد">
+                        </iframe>
+                    </div>
+                </div>
             </div>
             <div class="footer-cols">
                 <div class="footer-col">
@@ -67,14 +91,10 @@
                 <div class="footer-col footer-subsidiaries">
                     <h4>شرکت‌های زیرمجموعه</h4>
                     <div class="subsidiary-item">
-                        <a href="https://malzino.com" target="_blank" rel="noopener noreferrer" class="subsidiary-name m-0"
-                            dir="ltr">
+                        <a href="https://malzino.com" target="_blank" rel="noopener noreferrer"
+                            class="subsidiary-name m-0" dir="ltr">
                             Malzino
-                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="1.8">
-                                <path
-                                    d="M14 3h7v7M10 14 21 3M19 13v7a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h7" />
-                            </svg>
+                            <img src="{{ asset('asset/img/آرم-شرکت.png') }}" alt="" style="width: 60px">
                         </a>
                         <span class="subsidiary-label">واحد فروش ملزینو</span>
                         <a href="tel:09136432008" class="subsidiary-phone" dir="ltr">
