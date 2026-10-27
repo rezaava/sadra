@@ -16,6 +16,7 @@
             <span></span>
         </button>
         <nav class="main-nav" id="mainNav">
+            <a href="{{ route('home') }}">خانه</a>
             <a href="{{ route('submit-portfolio') }}">ارسال نمونه‌کار</a>
             <a href="{{ route('home') }}#work">محصولات</a>
             <!-- <a href="#why">چرا ما</a> -->
@@ -94,7 +95,6 @@
                     @endif
                 </div>
             </div>
-            <a href="{{ route('home') }}">خانه</a>
             <a href="{{ route('blog') }}">وبلاگ</a>
             <a href="#contact">تماس</a>
             <a href="{{ route('about') }}">درباره ما</a>

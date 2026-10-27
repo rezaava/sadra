@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\ServiceCategoryController as AdminServiceCategoryController;
 use App\Http\Controllers\Admin\ServiceController as AdminServiceController;
 use App\Http\Controllers\AdminBrandController;
+use App\Http\Controllers\AdminProcessController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\BlogPostController;
 use App\Http\Controllers\HomeController;
@@ -108,4 +109,9 @@ Route::prefix('admin')->middleware('auth')->name('admin.')->group(function () {
 
     Route::get('/about', [AboutController::class, 'Adindex'])->name('about');
     Route::put('/about', [AboutController::class, 'update'])->name('about.update');
+    
+    Route::prefix('processes')->name('processes.')->group(function () {
+        Route::get('/', [AdminProcessController::class, 'index'])->name('index');
+        Route::put('/', [AdminProcessController::class, 'update'])->name('update');
+    });
 });
