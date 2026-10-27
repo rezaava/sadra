@@ -307,6 +307,7 @@
         }
 
         @media (max-width: 1100px) {
+
             .admin-table th,
             .admin-table td {
                 padding: 15px;
@@ -357,7 +358,6 @@
 @endsection
 
 @section('main')
-
     <div class="admin-content">
 
         <div class="requests-page">
@@ -433,7 +433,6 @@
                             @endphp
 
                             @forelse($requests as $request)
-
                                 <tr>
 
                                     <td>
@@ -478,12 +477,8 @@
 
                                     <td>
 
-                                        <a
-                                            href="{{ $request->link }}"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            class="link-btn"
-                                        >
+                                        <a href="{{ $request->link }}" target="_blank" rel="noopener noreferrer"
+                                            class="link-btn">
                                             <i class="bi bi-box-arrow-up-left"></i>
                                             مشاهده لینک
                                         </a>
@@ -492,24 +487,16 @@
 
                                     <td>
 
-                                        @if($request->file)
-
-                                            <a
-                                                href="{{ asset($request->file) }}"
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                class="file-btn"
-                                            >
+                                        @if ($request->file)
+                                            <a href="{{ asset($request->file) }}" target="_blank" rel="noopener noreferrer"
+                                                class="file-btn">
                                                 <i class="bi bi-file-earmark-arrow-down"></i>
                                                 مشاهده فایل
                                             </a>
-
                                         @else
-
                                             <span class="no-file">
                                                 بدون فایل
                                             </span>
-
                                         @endif
 
                                     </td>
@@ -519,7 +506,7 @@
                                     </td>
 
                                     <td class="date-cell">
-                                        {{ $request->created_at->format('Y/m/d') }}
+                                        {{ $request->created_at ? verta($request->created_at)->format('Y/m/d') : '-' }}
                                     </td>
 
                                 </tr>
@@ -550,7 +537,6 @@
                                     </td>
 
                                 </tr>
-
                             @endforelse
 
                         </tbody>
@@ -564,5 +550,4 @@
         </div>
 
     </div>
-
 @endsection

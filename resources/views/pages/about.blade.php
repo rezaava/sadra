@@ -65,9 +65,9 @@
 
             <div class="ab-story-side reveal">
                 <span class="ab-kicker">داستان ما</span>
-                <h2>بسته‌بندی، بخشی از تجربه‌ی برند است</h2>
+                <h2>{{ $about->slogan }}</h2>
                 <br>
-                <img src="{{ asset('asset/img/logo3.png') }}" alt="">
+                <img src="{{ asset($about->img) }}" alt="" style="border-radius: 10px;">
             </div>
 
             <div class="ab-story-body">

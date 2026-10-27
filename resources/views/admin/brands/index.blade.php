@@ -478,75 +478,59 @@
         <div class="brands-card">
 
             <div class="table-wrapper" id="brandsTableWrapper"
-                 @if($brands->isEmpty()) style="display: none;" @endif>
+                @if ($brands->isEmpty()) style="display: none;" @endif>
                 <table class="brands-table">
                     <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>تصویر</th>
-                        <th>نام برند</th>
-                        <th>تاریخ ثبت</th>
-                        <th>عملیات</th>
-                    </tr>
+                        <tr>
+                            <th>#</th>
+                            <th>تصویر</th>
+                            <th>نام برند</th>
+                            <th>تاریخ ثبت</th>
+                            <th>عملیات</th>
+                        </tr>
                     </thead>
 
                     <tbody id="brandsTableBody">
-                    @foreach($brands as $brand)
-                        <tr id="brand-row-{{ $brand->id }}">
-                            <td>
-                                <span class="brand-id">{{ $brand->id }}</span>
-                            </td>
+                        @foreach ($brands as $brand)
+                            <tr id="brand-row-{{ $brand->id }}">
+                                <td>
+                                    <span class="brand-id">{{ $brand->id }}</span>
+                                </td>
 
-                            <td>
-                                <img
-                                    src="{{ asset($brand->img) }}"
-                                    alt="{{ $brand->name }}"
-                                    class="brand-image"
-                                >
-                            </td>
+                                <td>
+                                    <img src="{{ asset($brand->img) }}" alt="{{ $brand->name }}" class="brand-image">
+                                </td>
 
-                            <td>
-                                <div class="brand-name">{{ $brand->name }}</div>
-                            </td>
+                                <td>
+                                    <div class="brand-name">{{ $brand->name }}</div>
+                                </td>
 
-                            <td>
-                                {{ $brand->created_at?->format('Y/m/d') }}
-                            </td>
+                                <td>
+                                    {{ $brand->created_at ? verta($brand->created_at)->format('Y/m/d') : '-' }} </td>
 
-                            <td>
-                                <div class="actions">
-                                    <button
-                                        type="button"
-                                        class="action-btn edit-btn edit-brand-btn"
-                                        title="ویرایش"
-                                        data-id="{{ $brand->id }}"
-                                        data-name="{{ $brand->name }}"
-                                        data-image="{{ asset($brand->img) }}"
-                                        data-update-url="{{ route('admin.brands.update', $brand->id) }}"
-                                    >
-                                        <i class="bi bi-pencil"></i>
-                                    </button>
+                                <td>
+                                    <div class="actions">
+                                        <button type="button" class="action-btn edit-btn edit-brand-btn" title="ویرایش"
+                                            data-id="{{ $brand->id }}" data-name="{{ $brand->name }}"
+                                            data-image="{{ asset($brand->img) }}"
+                                            data-update-url="{{ route('admin.brands.update', $brand->id) }}">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
 
-                                    <button
-                                        type="button"
-                                        class="action-btn delete-btn delete-brand-btn"
-                                        title="حذف"
-                                        data-id="{{ $brand->id }}"
-                                        data-name="{{ $brand->name }}"
-                                        data-delete-url="{{ route('admin.brands.destroy', $brand->id) }}"
-                                    >
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                    @endforeach
+                                        <button type="button" class="action-btn delete-btn delete-brand-btn" title="حذف"
+                                            data-id="{{ $brand->id }}" data-name="{{ $brand->name }}"
+                                            data-delete-url="{{ route('admin.brands.destroy', $brand->id) }}">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>
 
-            <div class="empty-state" id="emptyState"
-                 @if($brands->isNotEmpty()) style="display: none;" @endif>
+            <div class="empty-state" id="emptyState" @if ($brands->isNotEmpty()) style="display: none;" @endif>
                 <i class="bi bi-award"></i>
 
                 <h3>هنوز برندی ثبت نشده است</h3>
@@ -563,8 +547,7 @@
     </div>
 
     {{-- Create / Edit Modal --}}
-    <div class="modal fade brand-modal" id="brandModal" tabindex="-1"
-         aria-labelledby="brandModalTitle" aria-hidden="true">
+    <div class="modal fade brand-modal" id="brandModal" tabindex="-1" aria-labelledby="brandModalTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
 
@@ -576,15 +559,12 @@
                             افزودن برند جدید
                         </h5>
 
-                        <button type="button" class="btn-close"
-                                data-bs-dismiss="modal" aria-label="بستن"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="بستن"></button>
                     </div>
 
                     <div class="modal-body">
 
-                        <div id="formErrors"
-                             class="alert-error"
-                             style="display: none;"></div>
+                        <div id="formErrors" class="alert-error" style="display: none;"></div>
 
                         <div class="mb-4">
                             <label for="brandName" class="form-label">
@@ -592,14 +572,8 @@
                                 <span class="text-danger">*</span>
                             </label>
 
-                            <input
-                                type="text"
-                                class="form-control"
-                                id="brandName"
-                                name="name"
-                                placeholder="نام برند را وارد کنید"
-                                maxlength="255"
-                            >
+                            <input type="text" class="form-control" id="brandName" name="name"
+                                placeholder="نام برند را وارد کنید" maxlength="255">
 
                             <div class="invalid-feedback" id="nameError"></div>
                         </div>
@@ -616,21 +590,13 @@
                                 <small>JPG، PNG یا WEBP ـ حداکثر ۲ مگابایت</small>
                             </label>
 
-                            <input
-                                type="file"
-                                id="brandImage"
-                                name="img"
-                                class="d-none"
-                                accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
-                            >
+                            <input type="file" id="brandImage" name="img" class="d-none"
+                                accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp">
 
                             <div class="invalid-feedback" id="imageError"></div>
 
-                            <div class="image-preview-wrapper"
-                                 id="imagePreviewWrapper"
-                                 style="display: none;">
-                                <img src="" alt="پیش‌نمایش تصویر"
-                                     class="image-preview" id="imagePreview">
+                            <div class="image-preview-wrapper" id="imagePreviewWrapper" style="display: none;">
+                                <img src="" alt="پیش‌نمایش تصویر" class="image-preview" id="imagePreview">
 
                                 <span class="image-preview-label" id="imagePreviewLabel">
                                     پیش‌نمایش تصویر
@@ -641,8 +607,7 @@
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" class="modal-cancel-btn"
-                                data-bs-dismiss="modal">
+                        <button type="button" class="modal-cancel-btn" data-bs-dismiss="modal">
                             انصراف
                         </button>
 
@@ -661,7 +626,7 @@
 
 @section('js')
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const brandModalElement = document.getElementById('brandModal');
             const brandModal = new bootstrap.Modal(brandModalElement);
 
@@ -685,8 +650,8 @@
             let currentUpdateUrl = null;
             let toastTimeout = null;
 
-            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content
-                || brandForm.querySelector('[name="_token"]').value;
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content ||
+                brandForm.querySelector('[name="_token"]').value;
 
             function showToast(message, type = 'success') {
                 clearTimeout(toastTimeout);
@@ -694,7 +659,7 @@
                 toastMessage.textContent = message;
                 toastMessage.className = 'toast-message ' + type;
 
-                toastTimeout = setTimeout(function () {
+                toastTimeout = setTimeout(function() {
                     toastMessage.className = 'toast-message';
                 }, 3500);
             }
@@ -709,7 +674,7 @@
                 formErrors.style.display = 'none';
                 formErrors.textContent = '';
 
-                document.querySelectorAll('#brandForm .is-invalid').forEach(function (element) {
+                document.querySelectorAll('#brandForm .is-invalid').forEach(function(element) {
                     element.classList.remove('is-invalid');
                 });
 
@@ -720,9 +685,10 @@
             function showValidationErrors(errors) {
                 resetErrors();
 
-                Object.keys(errors).forEach(function (field) {
+                Object.keys(errors).forEach(function(field) {
                     const input = brandForm.querySelector('[name="' + field + '"]');
-                    const errorElement = document.getElementById(field === 'img' ? 'imageError' : field + 'Error');
+                    const errorElement = document.getElementById(field === 'img' ? 'imageError' : field +
+                        'Error');
 
                     if (input) {
                         input.classList.add('is-invalid');
@@ -850,7 +816,7 @@
             document.getElementById('openCreateModal').addEventListener('click', openCreateModal);
             document.getElementById('openCreateModalEmpty').addEventListener('click', openCreateModal);
 
-            document.addEventListener('click', function (event) {
+            document.addEventListener('click', function(event) {
                 const editButton = event.target.closest('.edit-brand-btn');
 
                 if (editButton) {
@@ -887,40 +853,40 @@
                     deleteButton.disabled = true;
 
                     fetch(deleteUrl, {
-                        method: 'DELETE',
-                        headers: {
-                            'X-CSRF-TOKEN': csrfToken,
-                            'Accept': 'application/json',
-                            'X-Requested-With': 'XMLHttpRequest'
-                        }
-                    })
-                    .then(async function (response) {
-                        const result = await response.json();
+                            method: 'DELETE',
+                            headers: {
+                                'X-CSRF-TOKEN': csrfToken,
+                                'Accept': 'application/json',
+                                'X-Requested-With': 'XMLHttpRequest'
+                            }
+                        })
+                        .then(async function(response) {
+                            const result = await response.json();
 
-                        if (!response.ok || !result.success) {
-                            throw new Error(result.message || 'حذف برند انجام نشد.');
-                        }
+                            if (!response.ok || !result.success) {
+                                throw new Error(result.message || 'حذف برند انجام نشد.');
+                            }
 
-                        return result;
-                    })
-                    .then(function (result) {
-                        const row = document.getElementById('brand-row-' + brandId);
+                            return result;
+                        })
+                        .then(function(result) {
+                            const row = document.getElementById('brand-row-' + brandId);
 
-                        if (row) {
-                            row.remove();
-                        }
+                            if (row) {
+                                row.remove();
+                            }
 
-                        updateEmptyState();
-                        showToast(result.message);
-                    })
-                    .catch(function (error) {
-                        showToast(error.message || 'خطا در حذف برند.', 'error');
-                        deleteButton.disabled = false;
-                    });
+                            updateEmptyState();
+                            showToast(result.message);
+                        })
+                        .catch(function(error) {
+                            showToast(error.message || 'خطا در حذف برند.', 'error');
+                            deleteButton.disabled = false;
+                        });
                 }
             });
 
-            brandImage.addEventListener('change', function () {
+            brandImage.addEventListener('change', function() {
                 resetErrors();
 
                 const file = brandImage.files[0];
@@ -949,7 +915,7 @@
 
                 const reader = new FileReader();
 
-                reader.onload = function (event) {
+                reader.onload = function(event) {
                     imagePreview.src = event.target.result;
                     imagePreviewWrapper.style.display = 'block';
                     imagePreviewLabel.textContent = 'پیش‌نمایش تصویر انتخاب‌شده';
@@ -958,12 +924,12 @@
                 reader.readAsDataURL(file);
             });
 
-            brandName.addEventListener('input', function () {
+            brandName.addEventListener('input', function() {
                 brandName.classList.remove('is-invalid');
                 document.getElementById('nameError').textContent = '';
             });
 
-            brandForm.addEventListener('submit', function (event) {
+            brandForm.addEventListener('submit', function(event) {
                 event.preventDefault();
 
                 resetErrors();
@@ -978,60 +944,60 @@
                 }
 
                 const formData = new FormData(brandForm);
-                const url = isEditing
-                    ? currentUpdateUrl
-                    : @json(route('admin.brands.store'));
+                const url = isEditing ?
+                    currentUpdateUrl :
+                    @json(route('admin.brands.store'));
 
 
                 setLoading(true);
 
                 fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': csrfToken,
-                        'Accept': 'application/json',
-                        'X-Requested-With': 'XMLHttpRequest'
-                    },
-                    body: formData
-                })
-                .then(async function (response) {
-                    const result = await response.json();
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken,
+                            'Accept': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        body: formData
+                    })
+                    .then(async function(response) {
+                        const result = await response.json();
 
-                    if (response.status === 422) {
-                        showValidationErrors(result.errors || {});
-                        throw new Error('لطفاً خطاهای فرم را برطرف کنید.');
-                    }
+                        if (response.status === 422) {
+                            showValidationErrors(result.errors || {});
+                            throw new Error('لطفاً خطاهای فرم را برطرف کنید.');
+                        }
 
-                    if (!response.ok || !result.success) {
-                        throw new Error(result.message || 'ذخیره اطلاعات انجام نشد.');
-                    }
+                        if (!response.ok || !result.success) {
+                            throw new Error(result.message || 'ذخیره اطلاعات انجام نشد.');
+                        }
 
-                    return result;
-                })
-                .then(function (result) {
-                    if (isEditing) {
-                        updateBrandRow(result.brand);
-                    } else {
-                        brandsTableBody.prepend(createBrandRow(result.brand));
-                    }
+                        return result;
+                    })
+                    .then(function(result) {
+                        if (isEditing) {
+                            updateBrandRow(result.brand);
+                        } else {
+                            brandsTableBody.prepend(createBrandRow(result.brand));
+                        }
 
-                    updateEmptyState();
-                    brandModal.hide();
+                        updateEmptyState();
+                        brandModal.hide();
 
-                    showToast(result.message);
-                    resetForm();
-                })
-                .catch(function (error) {
-                    if (error.message !== 'لطفاً خطاهای فرم را برطرف کنید.') {
-                        showToast(error.message || 'خطایی رخ داد.', 'error');
-                    }
-                })
-                .finally(function () {
-                    setLoading(false);
-                });
+                        showToast(result.message);
+                        resetForm();
+                    })
+                    .catch(function(error) {
+                        if (error.message !== 'لطفاً خطاهای فرم را برطرف کنید.') {
+                            showToast(error.message || 'خطایی رخ داد.', 'error');
+                        }
+                    })
+                    .finally(function() {
+                        setLoading(false);
+                    });
             });
 
-            brandModalElement.addEventListener('hidden.bs.modal', function () {
+            brandModalElement.addEventListener('hidden.bs.modal', function() {
                 resetForm();
             });
         });

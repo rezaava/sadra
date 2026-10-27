@@ -105,4 +105,7 @@ Route::prefix('admin')->middleware('auth')->name('admin.')->group(function () {
     });
     Route::post('/video', [AdminController::class, 'uploadVideo'])->name('video.upload');
     Route::delete('/video', [AdminController::class, 'deleteVideo'])->name('video.delete');
+
+    Route::get('/about', [AboutController::class, 'Adindex'])->name('about');
+    Route::put('/about', [AboutController::class, 'update'])->name('about.update');
 });

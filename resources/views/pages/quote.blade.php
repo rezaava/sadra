@@ -109,9 +109,9 @@
             <div class="quote-form-wrap reveal">
                 <div class="quote-form-head {{ session('success') ? 'hide' : '' }}" id="quoteFormHead">
                     <h2>فرم استعلام قیمت</h2>
-                    <p>هرچه اطلاعات دقیق‌تری بدهید، پیش‌فاکتور دقیق‌تری دریافت می‌کنید. فیلدهای بدون توضیح، اختیاری هستند.
-                    </p>
+                    <p>هرچه اطلاعات دقیق‌تری بدهید، پیش‌فاکتور دقیق‌تری دریافت می‌کنید. فیلدهای بدون توضیح، اختیاری هستند.</p>
                 </div>
+
                 @if (session('success'))
                     <div class="quote-success show" id="quoteSuccess">
                         <span class="quote-success-icon">
@@ -120,60 +120,60 @@
                                 <path d="M20 6L9 17l-5-5" />
                             </svg>
                         </span>
-
                         <h3>درخواست استعلام شما ثبت شد</h3>
-
                         <p>{{ session('success') }}</p>
-
                         <div class="quote-tracking">
                             <span>کد رهگیری درخواست شما</span>
                             <strong dir="ltr">{{ session('tracking_code') }}</strong>
                             <p>این کد را برای پیگیری درخواست خود نگه دارید.</p>
                         </div>
-
                         <a href="{{ route('home') }}" class="btn-ghost">بازگشت به صفحه اصلی</a>
                     </div>
                 @else
                     <form class="quote-form" id="quoteForm" method="POST" action="{{ route('quote.store') }}"
                         enctype="multipart/form-data">
                         @csrf
+
                         <div class="quote-field">
-                            <label for="quoteName">نام و نام خانوادگی</label>
+                            <label for="quoteName">نام و نام خانوادگی <span class="opt">(اجباری)</span></label>
                             <input type="text" id="quoteName" name="name" value="{{ old('name') }}"
                                 placeholder="مثلاً: علی رضایی" required>
                             @error('name')
                                 <span class="quote-field-error">{{ $message }}</span>
                             @enderror
                         </div>
+
                         <div class="quote-field">
-                            <label for="quoteBrand">نام برند / شرکت</label>
+                            <label for="quoteBrand">نام برند / شرکت <span class="opt">(اجباری)</span></label>
                             <input type="text" id="quoteBrand" name="brand" value="{{ old('brand') }}"
                                 placeholder="نام برند شما" required>
                             @error('brand')
                                 <span class="quote-field-error">{{ $message }}</span>
                             @enderror
                         </div>
+
                         <div class="quote-field">
-                            <label for="quoteEmail">ایمیل</label>
+                            <label for="quoteEmail">ایمیل <span class="opt">(اختیاری)</span></label>
                             <input type="email" id="quoteEmail" name="email" value="{{ old('email') }}"
                                 placeholder="example@email.com">
                             @error('email')
                                 <span class="quote-field-error">{{ $message }}</span>
                             @enderror
                         </div>
+
                         <div class="quote-field">
-                            <label for="quotePhone">شماره تماس</label>
+                            <label for="quotePhone">شماره تماس <span class="opt">(اجباری)</span></label>
                             <input type="tel" id="quotePhone" name="phone" value="{{ old('phone') }}"
                                 placeholder="۰۹۱۲۰۰۰۰۰۰۰" required>
                             @error('phone')
                                 <span class="quote-field-error">{{ $message }}</span>
                             @enderror
                         </div>
+
                         <div class="quote-field">
-                            <label for="quoteCategory">نوع محصول</label>
+                            <label for="quoteCategory">نوع محصول <span class="opt">(اجباری)</span></label>
                             <select id="quoteCategory" name="category" required>
-                                <option value="" disabled @selected(!old('category'))>یک دسته را انتخاب کنید
-                                </option>
+                                <option value="" disabled @selected(!old('category'))>یک دسته را انتخاب کنید</option>
                                 <option value="carton" @selected(old('category') === 'carton')>کارتن مواد غذایی</option>
                                 <option value="agriculture" @selected(old('category') === 'agriculture')>کارتن کشاورزی</option>
                                 <option value="pharma" @selected(old('category') === 'pharma')>کارتن دارویی</option>
@@ -187,10 +187,9 @@
                         </div>
 
                         <div class="quote-field">
-                            <label for="quotePackaging">نوع بسته‌بندی مدنظر</label>
+                            <label for="quotePackaging">نوع بسته‌بندی مدنظر <span class="opt">(اجباری)</span></label>
                             <select id="quotePackaging" name="packaging" required>
-                                <option value="" disabled @selected(!old('packaging'))>یک گزینه را انتخاب کنید
-                                </option>
+                                <option value="" disabled @selected(!old('packaging'))>یک گزینه را انتخاب کنید</option>
                                 <option value="export-carton" @selected(old('packaging') === 'export-carton')>کارتن چاپی</option>
                                 <option value="gift-box" @selected(old('packaging') === 'gift-box')>کارتن لمینتی</option>
                                 <option value="die-cut" @selected(old('packaging') === 'die-cut')>کارتن دایکاتی</option>
@@ -199,11 +198,11 @@
                                 <span class="quote-field-error">{{ $message }}</span>
                             @enderror
                         </div>
+
                         <div class="quote-field">
-                            <label for="quoteQuantity">تیراژ تقریبی</label>
+                            <label for="quoteQuantity">تیراژ تقریبی <span class="opt">(اجباری)</span></label>
                             <select id="quoteQuantity" name="quantity" required>
-                                <option value="" disabled @selected(!old('quantity'))>یک بازه را انتخاب کنید
-                                </option>
+                                <option value="" disabled @selected(!old('quantity'))>یک بازه را انتخاب کنید</option>
                                 <option value="lt1000" @selected(old('quantity') === 'lt300')>کمتر از ۳۰۰</option>
                                 <option value="1k-5k" @selected(old('quantity') === '1k-5k')>۳۰۰ تا ۵٬۰۰۰ عدد</option>
                                 <option value="5k-20k" @selected(old('quantity') === '5k-10k')>۵٬۰۰۰ تا ۱۰٬۰۰۰ عدد</option>
@@ -215,6 +214,7 @@
                                 <span class="quote-field-error">{{ $message }}</span>
                             @enderror
                         </div>
+
                         <div class="quote-field">
                             <label for="quoteTimeline">زمان‌بندی مدنظر تحویل <span class="opt">(اختیاری)</span></label>
                             <select id="quoteTimeline" name="timeline">
@@ -228,18 +228,20 @@
                                 <span class="quote-field-error">{{ $message }}</span>
                             @enderror
                         </div>
+
                         <div class="quote-field">
-                            <label for="quoteDimensions">ابعاد تقریبی </label>
+                            <label for="quoteDimensions">ابعاد تقریبی <span class="opt">(اجباری)</span></label>
                             <input type="text" id="quoteDimensions" name="dimensions"
                                 value="{{ old('dimensions') }}" placeholder="مثلاً: ۲۰×۱۵×۱۰ سانتی‌متر" required>
                             @error('dimensions')
                                 <span class="quote-field-error">{{ $message }}</span>
                             @enderror
                         </div>
+
                         <div class="quote-field">
-                            <label for="quoteSheet">ترتیب ورق</label>
+                            <label for="quoteSheet">ترتیب ورق <span class="opt">(اجباری)</span></label>
                             <select id="quoteSheet" name="sheet" required>
-                                <option value="" @selected(!old('sheet'))>انتخاب کنید</option>
+                                <option value="" disabled @selected(!old('sheet'))>انتخاب کنید</option>
                                 <option value="3-layer" @selected(old('sheet') === '3-layer')>۳ لایه</option>
                                 <option value="5-layer" @selected(old('sheet') === '5-layer')>۵ لایه</option>
                             </select>
@@ -247,9 +249,9 @@
                                 <span class="quote-field-error">{{ $message }}</span>
                             @enderror
                         </div>
+
                         <div class="quote-field full">
-                            <label for="quoteFile">فایل تیغ و یا نمونه کارتن <span class="opt">(اختیاری، PDF یا
-                                    تصویر)</span></label>
+                            <label for="quoteFile">فایل تیغ و یا نمونه کارتن <span class="opt">(اختیاری، PDF یا تصویر)</span></label>
                             <label class="quote-file" id="quoteFileLabel" for="quoteFile">
                                 <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6">
                                     <path d="M12 3v12M7 10l5 5 5-5" />
@@ -262,6 +264,7 @@
                                 <span class="quote-field-error">{{ $message }}</span>
                             @enderror
                         </div>
+
                         <div class="quote-field full">
                             <label for="quoteMessage">توضیحات پروژه <span class="opt">(اختیاری)</span></label>
                             <textarea id="quoteMessage" name="message"
@@ -270,26 +273,26 @@
                                 <span class="quote-field-error">{{ $message }}</span>
                             @enderror
                         </div>
+
                         <div class="quote-form-foot">
                             <div>
                                 <label class="quote-consent">
                                     <input type="checkbox" name="consent" value="1"
                                         {{ old('consent') ? 'checked' : '' }} required>
-                                    <span>با ارسال این فرم، موافقت می‌کنم اطلاعات من برای بررسی و ارسال پیش‌فاکتور استفاده
-                                        شود.</span>
+                                    <span>با ارسال این فرم، موافقت می‌کنم اطلاعات من برای بررسی و ارسال پیش‌فاکتور استفاده شود. <span class="opt">(اجباری)</span></span>
                                 </label>
                                 @error('consent')
                                     <span class="quote-field-error">{{ $message }}</span>
                                 @enderror
                             </div>
-                            <button type="submit" class="btn-primary quote-submit-btn width-fit-content">ارسال درخواست
-                                استعلام</button>
+                            <button type="submit" class="btn-primary quote-submit-btn width-fit-content">ارسال درخواست استعلام</button>
                         </div>
                     </form>
                 @endif
             </div>
         </div>
     </section>
+
     <section class="cta-section" id="contact">
         <div class="wrap">
             <div class="cta-card">
