@@ -1,286 +1,978 @@
 @extends('layout.master')
+
 @section('head')
-    <title>دعوت به همکاری | صدرا</title>
     <link rel="stylesheet" href="{{ asset('asset/css/join.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/css/persian-datepicker.min.css">
+    <title>فرم استخدام | صنایع بسته‌بندی صدرا</title>
+    <style>
+        .employment-page {
+            direction: rtl;
+            color: #1a1740;
+            padding: 36px 0 60px
+        }
+
+        .employment-page * {
+            box-sizing: border-box
+        }
+
+        .employment-card {
+            max-width: 1200px;
+            margin: auto;
+            padding: 28px;
+            background: #fffdf8;
+            border: 1px solid #e6e1d8;
+            border-radius: 16px
+        }
+
+        .employment-head {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+            padding-bottom: 22px;
+            margin-bottom: 24px;
+            border-bottom: 2px solid #cdb18e
+        }
+
+        .employment-head h1 {
+            font-size: 26px;
+            margin: 0 0 8px;
+            font-weight: 800
+        }
+
+        .employment-head p {
+            margin: 0;
+            color: #6b687d
+        }
+
+        .employment-meta {
+            display: grid;
+            grid-template-columns: repeat(1, minmax(120px, 1fr));
+            gap: 12px
+        }
+
+        .employment-section {
+            padding: 22px;
+            margin-bottom: 22px;
+            background: #fff;
+            border: 1px solid #e6e1d8;
+            border-radius: 12px
+        }
+
+        .employment-section h2 {
+            font-size: 18px;
+            margin: 0 0 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #eee8df
+        }
+
+        .employment-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px
+        }
+
+        .employment-grid.two {
+            grid-template-columns: repeat(2, minmax(0, 1fr))
+        }
+
+        .employment-field {
+            min-width: 0
+        }
+
+        .employment-field.full {
+            grid-column: 1/-1
+        }
+
+        .employment-page label,
+        .employment-page .field-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 7px
+        }
+
+        .employment-page input:not([type=checkbox]):not([type=radio]),
+        .employment-page select,
+        .employment-page textarea {
+            width: 100%;
+            min-height: 43px;
+            padding: 10px 12px;
+            border: 1px solid #dcd8e2;
+            border-radius: 7px;
+            background: #fff;
+            color: #1a1740;
+            font: inherit;
+            font-size: 14px
+        }
+
+        .employment-page textarea {
+            min-height: 100px;
+            resize: vertical
+        }
+
+        .employment-page input:focus,
+        .employment-page select:focus,
+        .employment-page textarea:focus {
+            outline: 2px solid #cdb18e;
+            outline-offset: 1px
+        }
+
+        .employment-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px
+        }
+
+        .employment-options label {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            margin: 0;
+            font-weight: 500
+        }
+
+        .employment-options input {
+            accent-color: #423a9e
+        }
+
+        .employment-table-wrap {
+            overflow-x: auto
+        }
+
+        .employment-table {
+            width: 100%;
+            min-width: 780px;
+            border-collapse: collapse
+        }
+
+        .employment-table th,
+        .employment-table td {
+            border: 1px solid #e6e1d8;
+            padding: 9px;
+            vertical-align: top
+        }
+
+        .employment-table th {
+            background: #f7f4ee;
+            font-size: 12px;
+            text-align: right
+        }
+
+        .employment-table td input,
+        .employment-table td select,
+        .employment-table td textarea {
+            min-width: 110px
+        }
+
+        .employment-add,
+        .employment-remove {
+            border: 0;
+            border-radius: 7px;
+            padding: 9px 13px;
+            cursor: pointer;
+            font: inherit;
+            font-size: 13px
+        }
+
+        .employment-add {
+            margin-top: 12px;
+            background: #1a1740;
+            color: #fff
+        }
+
+        .employment-remove {
+            background: #fbe8e6;
+            color: #8d2820
+        }
+
+        .employment-note {
+            font-size: 12px;
+            color: #777185;
+            line-height: 1.9;
+            margin-top: 12px
+        }
+
+        .employment-alert {
+            padding: 14px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px
+        }
+
+        .employment-alert.success {
+            background: #e7f6eb;
+            color: #176336
+        }
+
+        .employment-alert.errors {
+            background: #fff0ee;
+            color: #8d2820
+        }
+
+        .employment-error {
+            display: block;
+            color: #b42318;
+            font-size: 12px;
+            margin-top: 5px
+        }
+
+        .employment-submit {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap
+        }
+
+        .employment-submit button {
+            border: 0;
+            border-radius: 8px;
+            padding: 13px 24px;
+            background: #1a1740;
+            color: #fff;
+            font: inherit;
+            font-weight: 700;
+            cursor: pointer
+        }
+
+        .employment-submit a {
+            color: #423a9e
+        }
+
+        .jalali-date {
+            direction: ltr;
+            text-align: left;
+            cursor: pointer;
+            background: #fff
+        }
+
+        .persian-datepicker-container {
+            z-index: 99999 !important
+        }
+
+        @media(max-width:800px) {
+            .employment-card {
+                padding: 16px
+            }
+
+            .employment-grid,
+            .employment-grid.two {
+                grid-template-columns: repeat(2, minmax(0, 1fr))
+            }
+
+            .employment-section {
+                padding: 16px
+            }
+        }
+
+        @media(max-width:520px) {
+
+            .employment-grid,
+            .employment-grid.two {
+                grid-template-columns: 1fr
+            }
+
+            .employment-meta {
+                width: 100%
+            }
+
+            .employment-head h1 {
+                font-size: 21px
+            }
+        }
+    </style>
 @endsection
+
 @section('main')
-    <div class="page-bg-anim" aria-hidden="true">
-        <span class="pba-blob pba-1"></span>
-        <span class="pba-blob pba-2"></span>
-        <span class="pba-blob pba-3"></span>
-    </div>
-    <section class="join-hero">
-        <div class="join-hero-icons" aria-hidden="true">
-            <svg viewBox="0 0 34 34">
-                <rect x="4" y="4" width="26" height="26" fill="none" stroke-width="1.2" />
-                <line x1="4" y1="14" x2="30" y2="14" stroke-width="1.2" />
-            </svg>
-            <svg viewBox="0 0 34 34">
-                <circle cx="17" cy="17" r="12" fill="none" stroke-width="1.2" />
-            </svg>
-            <svg viewBox="0 0 34 34">
-                <path d="M17 4 L30 12 L17 20 L4 12 Z" fill="none" stroke-width="1.2" />
-            </svg>
-            <svg viewBox="0 0 34 34">
-                <path d="M17 4 L30 12 L17 30 L4 12 Z" fill="none" stroke-width="1.2" />
-            </svg>
-        </div>
-        <div class="wrap join-hero-inner">
-            <p class="breadcrumb">
-                <a href="{{ route('home') }}">خانه</a>
-                <span class="sep">/</span>
-                <span class="current">دعوت به همکاری</span>
-            </p>
-            <span class="join-hero-eyebrow">SADRA. — CAREERS</span>
-            <h1 class="join-hero-title">به جمع
-                <span class="accent-grad">خانواده صدرا</span>
-                بپیوندید
-            </h1>
-            <p class="join-hero-lede">ما همیشه به دنبال آدم‌هایی هستیم که به بسته‌بندی به چشم یک طراحی جدی نگاه می‌کنند؛ اگر
-                دوست دارید در پروژه‌های واقعی برندها نقش داشته باشید، فرم زیر را پر کنید تا با شما در ارتباط باشیم.</p>
-            <div class="join-hero-buttons">
-                <a href="#joinFormSection" class="btn-primary">تکمیل فرم همکاری</a>
-                <a href="mailto:careers@sadraco.ir" class="btn-ghost">careers@sadraco.ir</a>
-            </div>
-        </div>
-    </section>
-    <section class="join-why">
+    <div class="employment-page">
         <div class="wrap">
-            <div class="section-head reveal">
-                <h2>چرا با ما همکاری کنید</h2>
-                <p class="section-note">فضایی برای رشد واقعی، در کنار پروژه‌هایی که واقعاً تولید و اجرا می‌شوند.</p>
-            </div>
-            <div class="why-grid">
-                <div class="why-card reveal" style="--d:0s">
-                    <svg class="why-icon" viewBox="0 0 40 40" fill="none" stroke="#221f5e" stroke-width="1.4">
-                        <path d="M20 4 L34 12 L20 20 L6 12 Z" />
-                        <path d="M6 12 L6 28 L20 36 L34 28 L34 12" />
-                        <path d="M20 20 L20 36" />
-                    </svg>
-                    <h3>پروژه‌های واقعی</h3>
-                    <p>روی بسته‌بندی برندهایی کار می‌کنید که واقعاً تولید و روانه‌ی بازار می‌شوند، نه تمرین‌های فرضی.</p>
+            <form class="employment-card" id="employmentForm" method="POST" action="{{ route('join.store') }}">
+                @csrf
+
+                <div class="employment-head">
+                    <div>
+                        <h1>فرم استخدام صنایع بسته‌بندی صدرا</h1>
+                        <p>لطفاً اطلاعات زیر را با دقت تکمیل کنید.</p>
+                    </div>
+                    <div class="employment-meta">
+                        <div class="employment-field">
+                            <label for="form_date">تاریخ تکمیل فرم</label>
+                            <input id="form_date" type="text" class="jalali-date" value="{{ now()->format('Y-m-d') }}"
+                                disabled>
+                        </div>
+                    </div>
                 </div>
-                <div class="why-card reveal" style="--d:0.08s">
-                    <svg class="why-icon" viewBox="0 0 40 40" fill="none" stroke="#221f5e" stroke-width="1.4">
-                        <circle cx="20" cy="20" r="14" />
-                        <path d="M20 11 v9 l6 4" />
-                    </svg>
-                    <h3>یادگیری مستمر</h3>
-                    <p>از طراحی ساختاری تا نظارت بر چاپ؛ فرصت یادگیری کل چرخه‌ی ساخت یک بسته‌بندی را دارید.</p>
-                </div>
-                <div class="why-card reveal" style="--d:0.16s">
-                    <svg class="why-icon" viewBox="0 0 40 40" fill="none" stroke="#221f5e" stroke-width="1.4">
-                        <rect x="6" y="6" width="28" height="28" rx="4" />
-                        <path d="M13 20 h14 M20 13 v14" />
-                    </svg>
-                    <h3>تیم کوچک و صمیمی</h3>
-                    <p>در استودیویی کار می‌کنید که تصمیم‌ها سریع گرفته می‌شوند و صدای هر عضو تیم شنیده می‌شود.</p>
-                </div>
-                <div class="why-card reveal" style="--d:0.24s">
-                    <svg class="why-icon" viewBox="0 0 40 40" fill="none" stroke="#221f5e" stroke-width="1.4">
-                        <path d="M8 32 V18 L20 8 L32 18 V32" />
-                        <path d="M16 32 V22 H24 V32" />
-                    </svg>
-                    <h3>مسیر رشد شفاف</h3>
-                    <p>بازخورد مستمر و مسیر پیشرفت مشخص، برای این‌که بدانید کجا ایستاده‌اید و کجا می‌روید.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section class="join-form-section" id="joinFormSection">
-        <div class="wrap">
-            <div class="join-form-wrap reveal">
-                <div class="join-form-head {{ session('success') ? 'hide' : '' }}" id="joinFormHead">
-                    <h2>فرم همکاری با صدرا</h2>
-                    <p>اطلاعات خودتان را با ما در میان بگذارید؛ تیم ما فرم شما را بررسی می‌کند و در صورت تناسب با نیازهای
-                        استودیو، تماس می‌گیرد.</p>
-                </div>
+
                 @if (session('success'))
-                    <div class="join-success show" id="joinSuccess">
-                        <span class="join-success-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <path d="M20 6L9 17l-5-5" />
-                            </svg>
-                        </span>
-                        <h3>درخواست شما ثبت شد</h3>
-                        <p>{{ session('success') }}</p>
-                        <a href="{{ route('home') }}" class="btn-ghost" id="joinResetBtn">بازگشت به صفحه اصلی</a>
+                    <div class="employment-alert success">{{ session('success') }}</div>
+                @endif
+
+                @if ($errors->any())
+                    <div class="employment-alert errors">
+                        <strong>لطفاً خطاهای زیر را بررسی کنید:</strong>
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
                     </div>
-                @else
-                    <form class="join-form" id="joinForm" method="POST" action="{{ route('join.store') }}"
-                        enctype="multipart/form-data">
-                        @csrf
-                        <div class="join-field">
-                            <label for="joinName">نام و نام خانوادگی</label>
-                            <input type="text" id="joinName" name="name" value="{{ old('name') }}"
-                                placeholder="مثلاً: سارا احمدی" required>
+                @endif
+
+                <section class="employment-section">
+                    <h2>۱ ـ اطلاعات شخصی</h2>
+                    <div class="employment-grid">
+                        <div class="employment-field">
+                            <label for="name">نام و نام خانوادگی *</label>
+                            <input id="name" name="name" value="{{ old('name') }}" required>
                             @error('name')
-                                <span class="join-field-error">{{ $message }}</span>
+                                <span class="employment-error">{{ $message }}</span>
                             @enderror
                         </div>
-                        <div class="join-field">
-                            <label for="joinEmail">ایمیل</label>
-                            <input type="email" id="joinEmail" name="email" value="{{ old('email') }}"
-                                placeholder="example@email.com" required>
-                            @error('email')
-                                <span class="join-field-error">{{ $message }}</span>
-                            @enderror
+                        <div class="employment-field">
+                            <label for="father_name">نام پدر</label>
+                            <input id="father_name" name="father_name" value="{{ old('father_name') }}">
                         </div>
-                        <div class="join-field">
-                            <label for="joinPhone">شماره تماس</label>
-                            <input type="tel" id="joinPhone" name="phone" value="{{ old('phone') }}"
-                                placeholder="۰۹۱۲۰۰۰۰۰۰۰" required>
+                        <div class="employment-field">
+                            <label for="national_id">کد ملی</label>
+                            <input id="national_id" name="national_id" value="{{ old('national_id') }}">
+                        </div>
+                        <div class="employment-field">
+                            <label for="birth_certificate_number">شماره شناسنامه</label>
+                            <input id="birth_certificate_number" name="birth_certificate_number"
+                                value="{{ old('birth_certificate_number') }}">
+                        </div>
+                        <div class="employment-field">
+                            <label for="birth_date">تاریخ تولد</label>
+                            <input id="birth_date" type="text" class="jalali-date" name="birth_date"
+                                value="{{ old('birth_date') }}" autocomplete="off" placeholder="۱۴۰۵/۰۱/۰۱">
+                        </div>
+                        <div class="employment-field">
+                            <label for="birth_place">محل تولد</label>
+                            <input id="birth_place" name="birth_place" value="{{ old('birth_place') }}">
+                        </div>
+                        <div class="employment-field">
+                            <label for="certificate_issue_date">تاریخ صدور شناسنامه</label>
+                            <input id="certificate_issue_date" type="text" class="jalali-date"
+                                name="certificate_issue_date" value="{{ old('certificate_issue_date') }}"
+                                autocomplete="off">
+                        </div>
+                        <div class="employment-field">
+                            <label for="certificate_issue_place">محل صدور شناسنامه</label>
+                            <input id="certificate_issue_place" name="certificate_issue_place"
+                                value="{{ old('certificate_issue_place') }}">
+                        </div>
+                        <div class="employment-field">
+                            <label for="religion">دین (مذهب)</label>
+                            <input id="religion" name="religion" value="{{ old('religion') }}">
+                        </div>
+                        <div class="employment-field">
+                            <label for="nationality">ملیت</label>
+                            <input id="nationality" name="nationality" value="{{ old('nationality') }}">
+                        </div>
+                        <div class="employment-field">
+                            <span class="field-label">وضعیت تأهل</span>
+                            <div class="employment-options">
+                                <label><input type="radio" name="marital_status" value="single"
+                                        @checked(old('marital_status') === 'single')> مجرد</label>
+                                <label><input type="radio" name="marital_status" value="married"
+                                        @checked(old('marital_status') === 'married')> متأهل</label>
+                            </div>
+                        </div>
+                        <div class="employment-field">
+                            <span class="field-label">سلامت روحی و جسمانی</span>
+                            <div class="employment-options">
+                                <label><input type="radio" name="health_status" value="1"
+                                        @checked(old('health_status') === '1')> بله</label>
+                                <label><input type="radio" name="health_status" value="0"
+                                        @checked(old('health_status') === '0')> خیر</label>
+                            </div>
+                        </div>
+                        <div class="employment-field full">
+                            <label for="health_description">در صورت خیر، توضیح دهید</label>
+                            <textarea id="health_description" name="health_description">{{ old('health_description') }}</textarea>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="employment-section">
+                    <h2>۲ ـ سوابق تحصیلی و آموزشی</h2>
+                    <div class="employment-table-wrap">
+                        <table class="employment-table">
+                            <thead>
+                                <tr>
+                                    <th>مدرک تحصیلی (از آخرین مدرک)</th>
+                                    <th>رشته تحصیلی</th>
+                                    <th>نام مؤسسه آموزشی</th>
+                                    <th>عملیات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="educationRows">
+                                @foreach (old('education_records', [['degree' => '', 'field' => '', 'institution' => '']]) as $i => $row)
+                                    <tr>
+                                        <td><input name="education_records[{{ $i }}][degree]"
+                                                value="{{ $row['degree'] ?? '' }}"></td>
+                                        <td><input name="education_records[{{ $i }}][field]"
+                                                value="{{ $row['field'] ?? '' }}"></td>
+                                        <td><input name="education_records[{{ $i }}][institution]"
+                                                value="{{ $row['institution'] ?? '' }}"></td>
+                                        <td><button type="button" class="employment-remove"
+                                                onclick="removeRow(this)">حذف</button></td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <button type="button" class="employment-add"
+                        onclick="addRow('educationRows','education_records',['مدرک تحصیلی','رشته تحصیلی','نام مؤسسه آموزشی'])">+
+                        افزودن سابقه تحصیلی</button>
+                </section>
+
+                <section class="employment-section">
+                    <h2>۳ ـ تجربیات شغلی</h2>
+                    <div class="employment-table-wrap">
+                        <table class="employment-table">
+                            <thead>
+                                <tr>
+                                    <th>نام سازمان یا شرکت (از آخرین سابقه)</th>
+                                    <th>سمت / شرح شغل</th>
+                                    <th>مدت سابقه</th>
+                                    <th>تاریخ شروع</th>
+                                    <th>تاریخ پایان</th>
+                                    <th>آخرین حقوق و مزایا / ریال</th>
+                                    <th>علت ترک خدمت</th>
+                                    <th>عملیات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="workRows">
+                                @foreach (old('work_experiences', [['company' => '', 'position' => '', 'duration' => '', 'start_date' => '', 'end_date' => '', 'salary' => '', 'leaving_reason' => '']]) as $i => $row)
+                                    <tr>
+                                        @foreach (['company', 'position', 'duration', 'start_date', 'end_date', 'salary', 'leaving_reason'] as $key)
+                                            <td>
+                                                <input name="work_experiences[{{ $i }}][{{ $key }}]"
+                                                    value="{{ $row[$key] ?? '' }}"
+                                                    @if (in_array($key, ['start_date', 'end_date'])) type="text" class="jalali-date" autocomplete="off" @endif>
+                                            </td>
+                                        @endforeach
+                                        <td><button type="button" class="employment-remove"
+                                                onclick="removeRow(this)">حذف</button></td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <button type="button" class="employment-add"
+                        onclick="addRow('workRows','work_experiences',['نام سازمان یا شرکت','سمت / شرح شغل','مدت سابقه','تاریخ شروع','تاریخ پایان','حقوق و مزایا','علت ترک خدمت'])">+
+                        افزودن سابقه شغلی</button>
+                </section>
+
+                <section class="employment-section">
+                    <h2>۴ ـ آشنایی به زبان‌های خارجی و سایر دوره‌ها</h2>
+                    <div class="employment-table-wrap">
+                        <table class="employment-table">
+                            <thead>
+                                <tr>
+                                    <th>نام زبان</th>
+                                    <th>مکالمه</th>
+                                    <th>نوشتن</th>
+                                    <th>خواندن</th>
+                                    <th>عملیات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="languageRows">
+                                @foreach (old('languages', [['name' => 'انگلیسی', 'speaking' => '', 'writing' => '', 'reading' => '']]) as $i => $row)
+                                    <tr>
+                                        <td><input name="languages[{{ $i }}][name]"
+                                                value="{{ $row['name'] ?? '' }}"></td>
+                                        @foreach (['speaking', 'writing', 'reading'] as $key)
+                                            <td>
+                                                <select name="languages[{{ $i }}][{{ $key }}]">
+                                                    <option value="">انتخاب سطح</option>
+                                                    @foreach (['weak' => 'ضعیف', 'medium' => 'متوسط', 'good' => 'خوب', 'excellent' => 'عالی'] as $v => $label)
+                                                        <option value="{{ $v }}" @selected(($row[$key] ?? '') === $v)>
+                                                            {{ $label }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </td>
+                                        @endforeach
+                                        <td><button type="button" class="employment-remove"
+                                                onclick="removeRow(this)">حذف</button></td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <button type="button" class="employment-add" onclick="addLanguageRow()">+ افزودن زبان</button>
+                    <div class="employment-grid two" style="margin-top:20px">
+                        <div class="employment-field">
+                            <label for="online_business">آشنایی با کسب‌وکار آنلاین</label>
+                            <input id="online_business" name="other_courses[0][name]"
+                                value="{{ old('other_courses.0.name') }}">
+                        </div>
+                        <div class="employment-field">
+                            <label for="online_store">آشنایی با فروشگاه آنلاین</label>
+                            <input id="online_store" name="other_courses[1][name]"
+                                value="{{ old('other_courses.1.name') }}">
+                        </div>
+                    </div>
+                </section>
+
+                <section class="employment-section">
+                    <h2>۵ ـ آشنایی با کامپیوتر و گواهینامه دوره‌های فنی و حرفه‌ای یا مؤسسات آموزشی</h2>
+                    <div class="employment-field">
+                        <span class="field-label">مهارت‌های کامپیوتری</span>
+                        <div class="employment-options">
+                            @foreach (['windows' => 'Windows', 'access' => 'Access', 'excel' => 'Excel', 'word' => 'Word', 'internet' => 'Internet', 'powerpoint' => 'PowerPoint', 'typing' => 'تایپ'] as $value => $label)
+                                <label><input type="checkbox" name="computer_skills[]" value="{{ $value }}"
+                                        @checked(in_array($value, old('computer_skills', [])))> {{ $label }}</label>
+                            @endforeach
+                        </div>
+                    </div>
+                    <div class="employment-field" style="margin-top:16px">
+                        <label for="computer_other">سایر مهارت‌ها / توضیحات</label>
+                        <textarea id="computer_other" name="computer_other">{{ old('computer_other') }}</textarea>
+                    </div>
+                    <div class="employment-table-wrap" style="margin-top:20px">
+                        <table class="employment-table">
+                            <thead>
+                                <tr>
+                                    <th>ردیف</th>
+                                    <th>نام دوره آموزشی</th>
+                                    <th>نام مؤسسه آموزش</th>
+                                    <th>مدت دوره</th>
+                                    <th>تاریخ شروع</th>
+                                    <th>تاریخ پایان</th>
+                                    <th>توضیحات</th>
+                                    <th>عملیات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="courseRows">
+                                @foreach (old('training_courses', [['name' => '', 'institution' => '', 'duration' => '', 'start_date' => '', 'end_date' => '', 'description' => '']]) as $i => $row)
+                                    <tr>
+                                        <td>{{ $i + 1 }}</td>
+                                        @foreach (['name', 'institution', 'duration', 'start_date', 'end_date', 'description'] as $key)
+                                            <td>
+                                                <input name="training_courses[{{ $i }}][{{ $key }}]"
+                                                    value="{{ $row[$key] ?? '' }}"
+                                                    @if (in_array($key, ['start_date', 'end_date'])) type="text" class="jalali-date" autocomplete="off" @endif>
+                                            </td>
+                                        @endforeach
+                                        <td><button type="button" class="employment-remove"
+                                                onclick="removeRow(this)">حذف</button></td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <button type="button" class="employment-add" onclick="addCourseRow()">+ افزودن دوره</button>
+                </section>
+
+                <section class="employment-section">
+                    <h2>۶ ـ نحوه همکاری</h2>
+                    <div class="employment-field">
+                        <span class="field-label">تمایل به همکاری به‌صورت</span>
+                        <div class="employment-options">
+                            <label><input type="checkbox" name="cooperation_types[]" value="full_time"
+                                    @checked(in_array('full_time', old('cooperation_types', [])))> تمام‌وقت</label>
+                            <label><input type="checkbox" name="cooperation_types[]" value="part_time"
+                                    @checked(in_array('part_time', old('cooperation_types', [])))> پاره‌وقت</label>
+                            <label><input type="checkbox" name="cooperation_types[]" value="off_site"
+                                    @checked(in_array('off_site', old('cooperation_types', [])))> همکاری خارج از مرکز (محل کارفرما)</label>
+                        </div>
+                    </div>
+                    <div class="employment-field" style="margin-top:16px">
+                        <label for="part_time_schedule">در صورت تمایل به کار پاره‌وقت، ساعات و روزهای همکاری را دقیقاً
+                            اعلام فرمایید</label>
+                        <textarea id="part_time_schedule" name="part_time_schedule">{{ old('part_time_schedule') }}</textarea>
+                    </div>
+                </section>
+
+                <section class="employment-section">
+                    <h2>۷ ـ شغل مورد درخواست</h2>
+                    <div class="employment-grid two">
+                        <div class="employment-field">
+                            <label for="requested_job">عنوان شغل مورد درخواست</label>
+                            <input id="requested_job" name="requested_job"
+                                value="{{ old('requested_job', 'حسابدار') }}">
+                        </div>
+                        <div class="employment-field">
+                            <label for="available_from">تاریخی که می‌توانید مشغول به کار شوید</label>
+                            <input id="available_from" type="text" class="jalali-date" name="available_from"
+                                value="{{ old('available_from') }}" autocomplete="off">
+                        </div>
+                    </div>
+                </section>
+
+                <section class="employment-section">
+                    <h2>۸ ـ سابقه پرداخت حق بیمه</h2>
+                    <div class="employment-field">
+                        <span class="field-label">آیا دارای سابقه پرداخت حق بیمه هستید؟</span>
+                        <div class="employment-options">
+                            <label><input type="radio" name="has_insurance_history" value="1"
+                                    @checked(old('has_insurance_history') === '1')> بله</label>
+                            <label><input type="radio" name="has_insurance_history" value="0"
+                                    @checked(old('has_insurance_history') === '0')> خیر</label>
+                        </div>
+                    </div>
+                    <div class="employment-field" style="margin-top:16px">
+                        <label for="insurance_years">در صورت مثبت بودن، چند سال؟</label>
+                        <input id="insurance_years" name="insurance_years" value="{{ old('insurance_years') }}">
+                    </div>
+                </section>
+
+                <section class="employment-section">
+                    <h2>۹ ـ چگونگی آشنایی شما با شرکت</h2>
+                    <div class="employment-field">
+                        <textarea name="how_found_company" aria-label="چگونگی آشنایی با شرکت">{{ old('how_found_company') }}</textarea>
+                    </div>
+                </section>
+
+                <section class="employment-section">
+                    <h2>۱۰ ـ دو نفر از کسانی که شما را به‌خوبی می‌شناسند و هیچ‌گونه نسبت فامیلی با شما ندارند</h2>
+                    <div class="employment-table-wrap">
+                        <table class="employment-table">
+                            <thead>
+                                <tr>
+                                    <th>ردیف</th>
+                                    <th>نام و نام خانوادگی</th>
+                                    <th>نسبت</th>
+                                    <th>شغل</th>
+                                    <th>نشانی و محل کار</th>
+                                    <th>تلفن</th>
+                                    <th>عملیات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="referenceRows">
+                                @foreach (old('references', [['name' => '', 'relation' => '', 'job' => '', 'workplace_address' => '', 'phone' => ''], ['name' => '', 'relation' => '', 'job' => '', 'workplace_address' => '', 'phone' => '']]) as $i => $row)
+                                    <tr>
+                                        <td>{{ $i + 1 }}</td>
+                                        @foreach (['name', 'relation', 'job', 'workplace_address', 'phone'] as $key)
+                                            <td><input name="references[{{ $i }}][{{ $key }}]"
+                                                    value="{{ $row[$key] ?? '' }}"></td>
+                                        @endforeach
+                                        <td><button type="button" class="employment-remove"
+                                                onclick="removeRow(this)">حذف</button></td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <button type="button" class="employment-add" onclick="addReferenceRow()">+ افزودن معرف</button>
+                </section>
+
+                <section class="employment-section">
+                    <h2>۱۱ ـ وضعیت اشتغال فعلی</h2>
+                    <div class="employment-options">
+                        <label><input type="radio" name="currently_employed" value="1"
+                                @checked(old('currently_employed') === '1')> بله، اکنون مشغول به کار هستم</label>
+                        <label><input type="radio" name="currently_employed" value="0"
+                                @checked(old('currently_employed') === '0')> خیر</label>
+                    </div>
+                </section>
+
+                <section class="employment-section">
+                    <h2>۱۲ ـ مسیر شغلی خود در ۱۰ سال آینده را به چه صورت می‌بینید؟ مایلید جایگاه شغلی شما چه باشد؟</h2>
+                    <textarea name="career_plan">{{ old('career_plan') }}</textarea>
+                </section>
+
+                <section class="employment-section">
+                    <h2>۱۳ ـ خود را به‌طور مشخص برای چه شغلی آماده می‌دانید؟</h2>
+                    <textarea name="prepared_for_job">{{ old('prepared_for_job') }}</textarea>
+                </section>
+
+                <section class="employment-section">
+                    <h2>۱۴ ـ نرم‌افزارهایی که با آن‌ها تجربه کار دارید</h2>
+                    <textarea name="experienced_software">{{ old('experienced_software') }}</textarea>
+                </section>
+
+                <section class="employment-section">
+                    <h2>۱۵ ـ حداقل حقوق مورد انتظار</h2>
+                    <div class="employment-field">
+                        <label for="expected_salary">مبلغ پیشنهادی (ریال)</label>
+                        <input id="expected_salary" name="expected_salary" value="{{ old('expected_salary') }}">
+                    </div>
+                </section>
+
+                <section class="employment-section">
+                    <h2>۱۶ ـ آدرس محل سکونت و اطلاعات تماس</h2>
+                    <div class="employment-grid">
+                        <div class="employment-field">
+                            <span class="field-label">نوع محل سکونت</span>
+                            <div class="employment-options">
+                                <label><input type="radio" name="residence_type" value="personal"
+                                        @checked(old('residence_type') === 'personal')> منزل شخصی</label>
+                                <label><input type="radio" name="residence_type" value="rented"
+                                        @checked(old('residence_type') === 'rented')> منزل اجاره‌ای</label>
+                                <label><input type="radio" name="residence_type" value="other"
+                                        @checked(old('residence_type') === 'other')> سایر</label>
+                            </div>
+                        </div>
+                        <div class="employment-field">
+                            <label for="phone">تلفن همراه *</label>
+                            <input id="phone" name="phone" type="tel" value="{{ old('phone') }}" required>
                             @error('phone')
-                                <span class="join-field-error">{{ $message }}</span>
+                                <span class="employment-error">{{ $message }}</span>
                             @enderror
                         </div>
-                        <div class="join-field">
-                            <label for="joinField">حوزه مورد علاقه</label>
-                            <select id="joinField" name="field" required>
-                                <option value="" disabled @selected(!old('field'))>یک حوزه را انتخاب کنید
-                                </option>
-                                <option value="graphic" @selected(old('field') === 'graphic')>طراحی گرافیک بسته‌بندی</option>
-                                <option value="structure" @selected(old('field') === 'structure')>طراحی ساختاری و دای‌کات</option>
-                                <option value="production" @selected(old('field') === 'production')>تولید و نظارت بر چاپ</option>
-                                <option value="marketing" @selected(old('field') === 'marketing')>بازاریابی و فروش</option>
-                                <option value="internship" @selected(old('field') === 'internship')>کارآموزی</option>
-                                <option value="other" @selected(old('field') === 'other')>سایر</option>
-                            </select>
-                            @error('field')
-                                <span class="join-field-error">{{ $message }}</span>
+                        <div class="employment-field">
+                            <label for="landline">تلفن ثابت</label>
+                            <input id="landline" name="landline" type="tel" value="{{ old('landline') }}">
+                        </div>
+                        <div class="employment-field">
+                            <label for="email">آدرس ایمیل</label>
+                            <input id="email" name="email" type="email" value="{{ old('email') }}">
+                            @error('email')
+                                <span class="employment-error">{{ $message }}</span>
                             @enderror
                         </div>
-                        <div class="join-field">
-                            <label for="joinExperience">سابقه کار <span class="opt">(اختیاری)</span></label>
-                            <select id="joinExperience" name="experience">
-                                <option value="" @selected(!old('experience'))>انتخاب کنید</option>
-                                <option value="lt1" @selected(old('experience') === 'lt1')>کمتر از ۱ سال</option>
-                                <option value="1to3" @selected(old('experience') === '1to3')>۱ تا ۳ سال</option>
-                                <option value="3to5" @selected(old('experience') === '3to5')>۳ تا ۵ سال</option>
-                                <option value="gt5" @selected(old('experience') === 'gt5')>بیش از ۵ سال</option>
-                            </select>
-                            @error('experience')
-                                <span class="join-field-error">{{ $message }}</span>
-                            @enderror
+                        <div class="employment-field full">
+                            <label for="residence_address">آدرس محل سکونت</label>
+                            <textarea id="residence_address" name="residence_address">{{ old('residence_address') }}</textarea>
                         </div>
-                        <div class="join-field">
-                            <label for="joinPortfolio">لینک نمونه‌کار <span class="opt">(اختیاری)</span></label>
-                            <input type="url" id="joinPortfolio" name="portfolio" value="{{ old('portfolio') }}"
-                                placeholder="https://...">
-                            @error('portfolio')
-                                <span class="join-field-error">{{ $message }}</span>
-                            @enderror
-                        </div>
-                        <div class="join-field full">
-                            <label for="joinResume">فایل رزومه <span class="opt">(اختیاری، PDF)</span></label>
-                            <label class="join-file" id="joinFileLabel" for="joinResume">
-                                <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6">
-                                    <path d="M12 3v12M7 10l5 5 5-5" />
-                                    <path d="M4 19h16" />
-                                </svg>
-                                <span>فایل را انتخاب کنید یا بکشید و رها کنید</span>
-                            </label>
-                            <input type="file" id="joinResume" name="resume" accept="application/pdf">
-                            @error('resume')
-                                <span class="join-field-error">{{ $message }}</span>
-                            @enderror
-                        </div>
-                        <div class="join-field full">
-                            <label for="joinMessage">درباره خودتان بگویید <span class="opt">(اختیاری)</span></label>
-                            <textarea id="joinMessage" name="message"
-                                placeholder="تجربه‌ها، پروژه‌های موردعلاقه، یا هر چیزی که فکر می‌کنید باید بدانیم...">{{ old('message') }}</textarea>
-                            @error('message')
-                                <span class="join-field-error">{{ $message }}</span>
-                            @enderror
-                        </div>
-                        <div class="join-form-foot">
-                            <label class="join-consent">
-                                <input type="checkbox" name="consent" value="1"
-                                    {{ old('consent') ? 'checked' : '' }} required>
-                                <span>با ارسال این فرم، موافقت می‌کنم اطلاعات من برای بررسی همکاری با صدرا استفاده
-                                    شود.</span>
-                            </label>
-                            @error('consent')
-                                <span class="join-field-error">{{ $message }}</span>
-                            @enderror
-                            <button type="submit" class="btn-primary join-submit-btn width-fit-content">ارسال درخواست همکاری</button>
-                        </div>
-            </div>
-            </form>
-            @endif
-        </div>
-        </div>
-    </section>
-    <section class="cta-section" id="contact">
-        <div class="wrap">
-            <div class="cta-card">
-                <span class="cta-glow g1"></span>
-                <span class="cta-glow g2"></span>
-                <div class="cta-dots" aria-hidden="true"></div>
-                <div class="cta-card-inner">
-                    <div class="cta-copy reveal">
-                        <span class="cta-badge">
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
-                                stroke-width="1.8">
-                                <path d="M12 3 L21 8 L12 13 L3 8 Z" />
-                                <path d="M3 8 L3 16 L12 21 L21 16 L21 8" />
-                                <path d="M12 13 L12 21" />
-                            </svg>
-                            آماده همکاری با برند شما
-                        </span>
-                        <h2>پروژه بعدی برند شما<br>از اینجا شروع می‌شود</h2>
-                        <p>برای گفتگو درباره بسته‌بندی محصول‌تان، با تیم صدرا در تماس باشید.</p>
-                        <a href="mailto:SadraPacking@gmail.com" class="btn-primary cta-btn">شروع گفتگو</a>
-                    </div>
-                    <div class="cta-contacts reveal" style="--d:0.15s">
-                        <a class="cta-contact-row" href="mailto:SadraPacking@gmail.com">
-                            <span class="cta-ic">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-                                    <rect x="3" y="5" width="18" height="14" rx="2" />
-                                    <path d="M3 7 L12 13 L21 7" />
-                                </svg>
-                            </span>
-                            <span class="en">SadraPacking@gmail.com</span>
-                        </a>
-                        <a class="cta-contact-row" href="tel:+989130032144">
-                            <span class="cta-ic">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-                                    <path d="M4 5c0 8.5 6.5 15 15 15l2-4-6-2-2 2c-3-1.5-5-3.5-6.5-6.5l2-2-2-6z" />
-                                </svg>
-                            </span>
-                            <span class="en" dir="ltr">0913 003 2144</span>
-                        </a>
-                        <div class="cta-contact-row static">
-                            <span class="cta-ic">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-                                    <path d="M12 21s7-6.5 7-12a7 7 0 1 0-14 0c0 5.5 7 12 7 12z" />
-                                    <circle cx="12" cy="9" r="2.4" />
-                                </svg>
-                            </span>
-                            <span>یزد -میدان قران -بلوار خاتم یزدی-ساختمان صدرا طبقه ۳</span>
+                        <div class="employment-field full">
+                            <label for="residence_description">توضیح سایر موارد</label>
+                            <textarea id="residence_description" name="residence_description">{{ old('residence_description') }}</textarea>
                         </div>
                     </div>
+                </section>
+
+                <section class="employment-section">
+                    <h2>تأیید اطلاعات متقاضی</h2>
+                    <p class="employment-note">بدین‌وسیله صحت کلیه اطلاعات مندرج در این فرم را تأیید و گواهی می‌نمایم.
+                        تکمیل نمودن این فرم هیچ‌گونه تعهدی در قبال استخدام شما برای شرکت ایجاد نمی‌نماید.</p>
+                    <div class="employment-grid two">
+                        <div class="employment-field">
+                            <label for="signature_name">نام و نام خانوادگی</label>
+                            <input id="signature_name" name="signature_name" value="{{ old('signature_name') }}">
+                        </div>
+                        <div class="employment-field">
+                            <label for="signature_date">تاریخ</label>
+                            <input id="signature_date" type="text" class="jalali-date" name="signature_date"
+                                value="{{ old('signature_date') }}" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="employment-field" style="margin-top:16px">
+                        <label><input type="checkbox" name="consent" value="1" @checked(old('consent'))
+                                required> صحت اطلاعات واردشده را تأیید می‌کنم.</label>
+                        @error('consent')
+                            <span class="employment-error">{{ $message }}</span>
+                        @enderror
+                    </div>
+                </section>
+
+                <div class="employment-submit">
+                    <button type="submit">ثبت فرم استخدام</button>
+                    <a href="{{ route('home') }}">بازگشت به صفحه اصلی</a>
                 </div>
-            </div>
+            </form>
         </div>
-    </section>
+    </div>
 @endsection
+
 @section('js')
-    <script src="{{ asset('asset/js/join.js') }}"></script>
-    @if (session('success'))
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const successBox = document.getElementById('joinSuccess');
-                if (successBox) {
-                    setTimeout(function() {
-                        successBox.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'center'
-                        });
-                    }, 300);
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/persian-date@1.1.0/dist/persian-date.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/js/persian-datepicker.min.js"></script>
+
+    <script>
+        function removeRow(button) {
+            const row = button.closest('tr');
+            const tbody = row.parentElement;
+
+            if (tbody.rows.length > 1) {
+                row.remove();
+                [...tbody.rows].forEach((tr, index) => {
+                    if (tr.cells[0] && /^\d+$/.test(tr.cells[0].textContent.trim())) {
+                        tr.cells[0].textContent = index + 1;
+                    }
+                });
+            } else {
+                row.querySelectorAll('input').forEach(input => input.value = '');
+                row.querySelectorAll('select').forEach(select => select.selectedIndex = 0);
+            }
+        }
+
+        function nextIndex(tbody) {
+            return Math.max(-1, ...[...tbody.querySelectorAll('input,select,textarea')]
+                .map(el => {
+                    const match = el.name.match(/\[(\d+)\]/);
+                    return match ? Number(match[1]) : -1;
+                })) + 1;
+        }
+
+        function initializeJalaliDatepicker(container = document) {
+            $(container).find('.jalali-date').each(function() {
+                const input = $(this);
+
+                if (input.data('datepicker-initialized')) {
+                    return;
                 }
+
+                input.data('datepicker-initialized', true);
+
+                const value = this.value.trim();
+
+                if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+                    const [year, month, day] = value.split('-').map(Number);
+                    this.value = new persianDate(new Date(year, month - 1, day)).format('YYYY/MM/DD');
+                }
+
+                input.persianDatepicker({
+                    format: 'YYYY/MM/DD',
+                    initialValue: false,
+                    autoClose: true,
+                    calendar: {
+                        persian: {
+                            locale: 'fa'
+                        }
+                    }
+                });
             });
-        </script>
-    @endif
+        }
+
+        function addRow(tbodyId, prefix, labels) {
+            const tbody = document.getElementById(tbodyId);
+            const index = nextIndex(tbody);
+            const tr = document.createElement('tr');
+
+            const keys = {
+                education_records: ['degree', 'field', 'institution'],
+                work_experiences: ['company', 'position', 'duration', 'start_date', 'end_date', 'salary',
+                    'leaving_reason'
+                ]
+            };
+
+            labels.forEach((label, i) => {
+                const td = document.createElement('td');
+                const input = document.createElement('input');
+                const key = keys[prefix][i];
+
+                input.name = `${prefix}[${index}][${key}]`;
+                input.setAttribute('aria-label', label);
+
+                if (prefix === 'work_experiences' && ['start_date', 'end_date'].includes(key)) {
+                    input.type = 'text';
+                    input.classList.add('jalali-date');
+                    input.autocomplete = 'off';
+                }
+
+                td.appendChild(input);
+                tr.appendChild(td);
+            });
+
+            const action = document.createElement('td');
+            action.innerHTML = '<button type="button" class="employment-remove" onclick="removeRow(this)">حذف</button>';
+            tr.appendChild(action);
+            tbody.appendChild(tr);
+            initializeJalaliDatepicker(tr);
+        }
+
+        function addLanguageRow() {
+            const tbody = document.getElementById('languageRows');
+            const index = nextIndex(tbody);
+            const tr = document.createElement('tr');
+            const name = document.createElement('td');
+
+            name.innerHTML = `<input name="languages[${index}][name]" aria-label="نام زبان">`;
+            tr.appendChild(name);
+
+            ['speaking', 'writing', 'reading'].forEach(key => {
+                const td = document.createElement('td');
+                const select = document.createElement('select');
+
+                select.name = `languages[${index}][${key}]`;
+                select.innerHTML =
+                    '<option value="">انتخاب سطح</option><option value="weak">ضعیف</option><option value="medium">متوسط</option><option value="good">خوب</option><option value="excellent">عالی</option>';
+
+                td.appendChild(select);
+                tr.appendChild(td);
+            });
+
+            const action = document.createElement('td');
+            action.innerHTML = '<button type="button" class="employment-remove" onclick="removeRow(this)">حذف</button>';
+            tr.appendChild(action);
+            tbody.appendChild(tr);
+        }
+
+        function addCourseRow() {
+            const tbody = document.getElementById('courseRows');
+            const index = nextIndex(tbody);
+            const tr = document.createElement('tr');
+            const number = document.createElement('td');
+
+            number.textContent = tbody.rows.length + 1;
+            tr.appendChild(number);
+
+            ['name', 'institution', 'duration', 'start_date', 'end_date', 'description'].forEach(key => {
+                const td = document.createElement('td');
+                const input = document.createElement('input');
+
+                input.name = `training_courses[${index}][${key}]`;
+
+                if (['start_date', 'end_date'].includes(key)) {
+                    input.type = 'text';
+                    input.classList.add('jalali-date');
+                    input.autocomplete = 'off';
+                }
+
+                td.appendChild(input);
+                tr.appendChild(td);
+            });
+
+            const action = document.createElement('td');
+            action.innerHTML = '<button type="button" class="employment-remove" onclick="removeRow(this)">حذف</button>';
+            tr.appendChild(action);
+            tbody.appendChild(tr);
+            initializeJalaliDatepicker(tr);
+        }
+
+        function addReferenceRow() {
+            const tbody = document.getElementById('referenceRows');
+            const index = nextIndex(tbody);
+            const tr = document.createElement('tr');
+            const number = document.createElement('td');
+
+            number.textContent = tbody.rows.length + 1;
+            tr.appendChild(number);
+
+            ['name', 'relation', 'job', 'workplace_address', 'phone'].forEach(key => {
+                const td = document.createElement('td');
+                const input = document.createElement('input');
+
+                input.name = `references[${index}][${key}]`;
+                td.appendChild(input);
+                tr.appendChild(td);
+            });
+
+            const action = document.createElement('td');
+            action.innerHTML = '<button type="button" class="employment-remove" onclick="removeRow(this)">حذف</button>';
+            tr.appendChild(action);
+            tbody.appendChild(tr);
+        }
+
+        function convertJalaliToGregorian(value) {
+            if (!value || !/^\d{4}[\/-]\d{1,2}[\/-]\d{1,2}$/.test(value.trim())) {
+                return value;
+            }
+
+            const [year, month, day] = value.trim().replace(/-/g, '/').split('/').map(Number);
+
+            return new persianDate([year, month, day])
+                .toCalendar('gregorian')
+                .format('YYYY-MM-DD');
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeJalaliDatepicker();
+
+            document.getElementById('employmentForm').addEventListener('submit', function() {
+                this.querySelectorAll('.jalali-date').forEach(input => {
+                    if (input.disabled || !input.name) {
+                        return;
+                    }
+
+                    input.value = convertJalaliToGregorian(input.value);
+                });
+            });
+        });
+    </script>
 @endsection

@@ -3,13 +3,13 @@
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\BlogController as AdminBlogController;
+use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\ServiceCategoryController as AdminServiceCategoryController;
 use App\Http\Controllers\Admin\ServiceController as AdminServiceController;
 use App\Http\Controllers\AdminBrandController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\BlogPostController;
-use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\IntroController;
 use App\Http\Controllers\JoinController;
@@ -48,6 +48,7 @@ Route::prefix('admin')->middleware('auth')->name('admin.')->group(function () {
 
     Route::prefix('requests')->name('requests.')->group(function () {
         Route::get('/join', [AdminController::class, 'joinRequests'])->name('join');
+        Route::get('/join/{joinSubmission}', [AdminController::class, 'showJoinRequest'])->name('join.show');
         Route::get('/quote', [AdminController::class, 'quoteRequests'])->name('quote');
         Route::get('/representative', [AdminController::class, 'representativeRequests'])->name('representative');
         Route::get('/portfolio', [AdminController::class, 'portfolioRequests'])->name('portfolio');

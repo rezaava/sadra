@@ -14,7 +14,6 @@ use App\Models\Service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 
 class AdminController extends Controller
 {
@@ -49,11 +48,30 @@ class AdminController extends Controller
             'adminVideo'
         ));
     }
+
     public function joinRequests()
     {
-        $requests = JoinSubmission::latest()->get();
+        $requests = JoinSubmission::query()
+            ->select([
+                'id',
+                'name',
+                'phone',
+                'email',
+                'requested_job',
+                'expected_salary',
+                'created_at',
+            ])
+            ->latest()
+            ->paginate(20);
 
         return view('admin.requests.join', compact('requests'));
+    }
+
+    public function showJoinRequest(JoinSubmission $joinSubmission)
+    {
+        return view('admin.requests.join-show', [
+            'request' => $joinSubmission,
+        ]);
     }
 
     public function quoteRequests()
@@ -88,7 +106,7 @@ class AdminController extends Controller
 
         $file = $request->file('video');
 
-        if (!$file || !$file->isValid()) {
+        if (! $file || ! $file->isValid()) {
             return response()->json([
                 'success' => false,
                 'message' => 'فایل ویدیو معتبر نیست.',
@@ -97,7 +115,7 @@ class AdminController extends Controller
 
         $videoDirectory = ('videos/admin');
 
-        if (!File::exists($videoDirectory)) {
+        if (! File::exists($videoDirectory)) {
             File::makeDirectory($videoDirectory, 0755, true);
         }
 
@@ -105,7 +123,7 @@ class AdminController extends Controller
 
         $extension = strtolower($file->getClientOriginalExtension());
 
-        $fileName = 'video_' . uniqid() . '_' . time() . '.' . $extension;
+        $fileName = 'video_'.uniqid().'_'.time().'.'.$extension;
 
         try {
             $file->move($videoDirectory, $fileName);
@@ -121,7 +139,7 @@ class AdminController extends Controller
             ], 500);
         }
 
-        $videoPath = 'videos/admin/' . $fileName;
+        $videoPath = 'videos/admin/'.$fileName;
 
         try {
 
@@ -176,12 +194,11 @@ class AdminController extends Controller
         ]);
     }
 
-
     public function deleteVideo()
     {
         $video = AdminVideo::first();
 
-        if (!$video) {
+        if (! $video) {
             return response()->json([
                 'success' => false,
                 'message' => 'ویدیویی برای حذف وجود ندارد.',
@@ -218,6 +235,7 @@ class AdminController extends Controller
             ], 500);
         }
     }
+
     public function portfolioRequests()
     {
         $requests = PortfolioSubmission::latest()->get();
