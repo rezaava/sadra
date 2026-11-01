@@ -12,6 +12,7 @@ class Service extends Model
         'icon',
         'description',
         'projects_count',
+        'image',
         'brands_count',
         'experience_years',
         'industries_count',

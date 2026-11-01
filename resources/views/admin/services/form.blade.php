@@ -187,7 +187,7 @@
             overflow: hidden;
         }
 
-        .icon-preview > div {
+        .icon-preview>div {
             width: 100%;
             height: 100%;
             display: flex;
@@ -509,15 +509,12 @@
             </div>
 
             <form
-                action="{{ $service->exists
-                    ? route('admin.services.update', $service->id)
-                    : route('admin.services.store') }}"
-                method="POST"
-            >
+                action="{{ $service->exists ? route('admin.services.update', $service->id) : route('admin.services.store') }}"
+                method="POST" enctype="multipart/form-data">
 
                 @csrf
 
-                @if($service->exists)
+                @if ($service->exists)
                     @method('PUT')
                 @endif
 
@@ -553,24 +550,16 @@
                                 دسته‌بندی
                             </label>
 
-                            <select
-                                name="service_category_id"
-                                class="form-select"
-                            >
+                            <select name="service_category_id" class="form-select">
 
                                 <option value="">
                                     انتخاب دسته‌بندی
                                 </option>
 
-                                @foreach($categories as $category)
-
-                                    <option
-                                        value="{{ $category->id }}"
-                                        @selected(old('service_category_id', $service->service_category_id) == $category->id)
-                                    >
+                                @foreach ($categories as $category)
+                                    <option value="{{ $category->id }}" @selected(old('service_category_id', $service->service_category_id) == $category->id)>
                                         {{ $category->name }}
                                     </option>
-
                                 @endforeach
 
                             </select>
@@ -591,13 +580,8 @@
                                 نام خدمت
                             </label>
 
-                            <input
-                                type="text"
-                                name="name"
-                                class="form-control"
-                                value="{{ old('name', $service->name) }}"
-                                placeholder="مثلاً طراحی سایت"
-                            >
+                            <input type="text" name="name" class="form-control"
+                                value="{{ old('name', $service->name) }}" placeholder="مثلاً طراحی سایت">
 
                             @error('name')
                                 <div class="text-danger mt-2">
@@ -615,15 +599,10 @@
                                 آیکن SVG خدمت
                             </label>
 
-                            <textarea
-                                name="icon"
-                                id="serviceIconInput"
-                                class="form-control icon-textarea"
-                                rows="7"
+                            <textarea name="icon" id="serviceIconInput" class="form-control icon-textarea" rows="7"
                                 placeholder='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 ...
-</svg>'
-                            >{{ old('icon', $service->icon) }}</textarea>
+</svg>'>{{ old('icon', $service->icon) }}</textarea>
 
                             @error('icon')
                                 <div class="text-danger mt-2">
@@ -644,15 +623,35 @@
 
                             </div>
 
-                            <div
-                                class="preview-error"
-                                id="serviceIconPreviewError"
-                            >
+                            <div class="preview-error" id="serviceIconPreviewError">
                                 کد SVG وارد شده معتبر نیست.
                             </div>
 
                         </div>
+                        {{-- Service Image --}}
 
+                        <div class="col-12">
+                            <label class="form-label">
+                                تصویر خدمت
+                            </label>
+
+                            <input type="file" name="image" id="serviceImageInput" class="form-control"
+                                accept="image/*">
+
+                            @error('image')
+                                <div class="text-danger mt-2">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+
+                            <div class="mt-3" id="serviceImagePreviewWrapper"
+                                style="{{ $service->image ? '' : 'display:none;' }}">
+
+                                <img id="serviceImagePreview" src="{{ $service->image ? asset($service->image) : '' }}"
+                                    alt="تصویر خدمت"
+                                    style="width:180px;height:120px;object-fit:cover;border-radius:15px;border:1px solid #ddd;">
+                            </div>
+                        </div>
                         {{-- Description --}}
 
                         <div class="col-12">
@@ -661,11 +660,7 @@
                                 توضیحات
                             </label>
 
-                            <textarea
-                                name="description"
-                                class="form-control"
-                                placeholder="توضیحات مربوط به خدمت..."
-                            >{{ old('description', $service->description) }}</textarea>
+                            <textarea name="description" class="form-control" placeholder="توضیحات مربوط به خدمت...">{{ old('description', $service->description) }}</textarea>
 
                             @error('description')
                                 <div class="text-danger mt-2">
@@ -712,13 +707,8 @@
                                     تعداد پروژه‌ها
                                 </label>
 
-                                <input
-                                    type="number"
-                                    name="projects_count"
-                                    min="0"
-                                    class="form-control stats-input"
-                                    value="{{ old('projects_count', $service->exists ? $service->projects_count : 0) }}"
-                                >
+                                <input type="number" name="projects_count" min="0" class="form-control stats-input"
+                                    value="{{ old('projects_count', $service->exists ? $service->projects_count : 0) }}">
 
                             </div>
 
@@ -733,13 +723,8 @@
                                     تعداد برندها
                                 </label>
 
-                                <input
-                                    type="number"
-                                    name="brands_count"
-                                    min="0"
-                                    class="form-control stats-input"
-                                    value="{{ old('brands_count', $service->exists ? $service->brands_count : 0) }}"
-                                >
+                                <input type="number" name="brands_count" min="0" class="form-control stats-input"
+                                    value="{{ old('brands_count', $service->exists ? $service->brands_count : 0) }}">
 
                             </div>
 
@@ -754,13 +739,9 @@
                                     سال تجربه
                                 </label>
 
-                                <input
-                                    type="number"
-                                    name="experience_years"
-                                    min="0"
+                                <input type="number" name="experience_years" min="0"
                                     class="form-control stats-input"
-                                    value="{{ old('experience_years', $service->exists ? $service->experience_years : 0) }}"
-                                >
+                                    value="{{ old('experience_years', $service->exists ? $service->experience_years : 0) }}">
 
                             </div>
 
@@ -775,13 +756,9 @@
                                     تعداد صنایع
                                 </label>
 
-                                <input
-                                    type="number"
-                                    name="industries_count"
-                                    min="0"
+                                <input type="number" name="industries_count" min="0"
                                     class="form-control stats-input"
-                                    value="{{ old('industries_count', $service->exists ? $service->industries_count : 0) }}"
-                                >
+                                    value="{{ old('industries_count', $service->exists ? $service->industries_count : 0) }}">
 
                             </div>
 
@@ -821,22 +798,23 @@
                             if ($oldItems !== null) {
                                 $items = $oldItems;
                             } elseif ($service->exists) {
-                                $items = $service->items->map(function ($item) {
-                                    return [
-                                        'number' => $item->number,
-                                        'icon' => $item->icon,
-                                        'title' => $item->title,
-                                        'text' => $item->text,
-                                        'tags' => $item->tags->pluck('name')->toArray(),
-                                    ];
-                                })->toArray();
+                                $items = $service->items
+                                    ->map(function ($item) {
+                                        return [
+                                            'number' => $item->number,
+                                            'icon' => $item->icon,
+                                            'title' => $item->title,
+                                            'text' => $item->text,
+                                            'tags' => $item->tags->pluck('name')->toArray(),
+                                        ];
+                                    })
+                                    ->toArray();
                             } else {
                                 $items = [];
                             }
                         @endphp
 
-                        @foreach($items as $index => $item)
-
+                        @foreach ($items as $index => $item)
                             <div class="item-card">
 
                                 <div class="item-header">
@@ -853,12 +831,8 @@
 
                                     </div>
 
-                                    <button
-                                        type="button"
-                                        class="remove-item"
-                                        onclick="removeItem(this)"
-                                        title="حذف آیتم"
-                                    >
+                                    <button type="button" class="remove-item" onclick="removeItem(this)"
+                                        title="حذف آیتم">
                                         <i class="bi bi-trash3"></i>
                                     </button>
 
@@ -874,13 +848,8 @@
                                             شماره
                                         </label>
 
-                                        <input
-                                            type="number"
-                                            min="0"
-                                            name="items[{{ $index }}][number]"
-                                            class="form-control number-box"
-                                            value="{{ $item['number'] ?? 0 }}"
-                                        >
+                                        <input type="number" min="0" name="items[{{ $index }}][number]"
+                                            class="form-control number-box" value="{{ $item['number'] ?? 0 }}">
 
                                     </div>
 
@@ -892,14 +861,10 @@
                                             آیکن SVG
                                         </label>
 
-                                        <textarea
-                                            name="items[{{ $index }}][icon]"
-                                            class="form-control icon-textarea item-icon-input"
-                                            rows="7"
+                                        <textarea name="items[{{ $index }}][icon]" class="form-control icon-textarea item-icon-input" rows="7"
                                             placeholder='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 ...
-</svg>'
-                                        >{{ $item['icon'] ?? '' }}</textarea>
+</svg>'>{{ $item['icon'] ?? '' }}</textarea>
 
                                         <div class="icon-preview-wrapper">
 
@@ -927,13 +892,9 @@
                                             عنوان
                                         </label>
 
-                                        <input
-                                            type="text"
-                                            name="items[{{ $index }}][title]"
-                                            class="form-control"
-                                            value="{{ $item['title'] ?? '' }}"
-                                            placeholder="عنوان آیتم"
-                                        >
+                                        <input type="text" name="items[{{ $index }}][title]"
+                                            class="form-control" value="{{ $item['title'] ?? '' }}"
+                                            placeholder="عنوان آیتم">
 
                                     </div>
 
@@ -945,11 +906,7 @@
                                             متن
                                         </label>
 
-                                        <textarea
-                                            name="items[{{ $index }}][text]"
-                                            class="form-control"
-                                            placeholder="توضیح آیتم..."
-                                        >{{ $item['text'] ?? '' }}</textarea>
+                                        <textarea name="items[{{ $index }}][text]" class="form-control" placeholder="توضیح آیتم...">{{ $item['text'] ?? '' }}</textarea>
 
                                     </div>
 
@@ -964,43 +921,26 @@
                                         تگ‌های این آیتم
                                     </div>
 
-                                    <div
-                                        class="tags-container"
-                                        data-item-index="{{ $index }}"
-                                    >
+                                    <div class="tags-container" data-item-index="{{ $index }}">
 
-                                        @foreach(($item['tags'] ?? ['']) as $tag)
-
+                                        @foreach ($item['tags'] ?? [''] as $tag)
                                             <div class="tag-row">
 
-                                                <input
-                                                    type="text"
-                                                    name="items[{{ $index }}][tags][]"
-                                                    class="form-control"
-                                                    value="{{ $tag }}"
-                                                    placeholder="مثلاً طراحی اختصاصی"
-                                                >
+                                                <input type="text" name="items[{{ $index }}][tags][]"
+                                                    class="form-control" value="{{ $tag }}"
+                                                    placeholder="مثلاً طراحی اختصاصی">
 
-                                                <button
-                                                    type="button"
-                                                    class="remove-tag"
-                                                    onclick="removeTag(this)"
-                                                    title="حذف تگ"
-                                                >
+                                                <button type="button" class="remove-tag" onclick="removeTag(this)"
+                                                    title="حذف تگ">
                                                     <i class="bi bi-x-lg"></i>
                                                 </button>
 
                                             </div>
-
                                         @endforeach
 
                                     </div>
 
-                                    <button
-                                        type="button"
-                                        class="add-tag"
-                                        onclick="addTag(this)"
-                                    >
+                                    <button type="button" class="add-tag" onclick="addTag(this)">
                                         <i class="bi bi-plus"></i>
                                         افزودن تگ
                                     </button>
@@ -1008,28 +948,18 @@
                                 </div>
 
                             </div>
-
                         @endforeach
 
                     </div>
 
-                    @if(count($items) === 0)
-
-                        <div
-                            class="empty-items"
-                            id="emptyItems"
-                        >
+                    @if (count($items) === 0)
+                        <div class="empty-items" id="emptyItems">
                             <i class="bi bi-layers"></i>
                             هنوز آیتمی برای این خدمت اضافه نشده است.
                         </div>
-
                     @endif
 
-                    <button
-                        type="button"
-                        class="add-item"
-                        onclick="addItem()"
-                    >
+                    <button type="button" class="add-item" onclick="addItem()">
                         <i class="bi bi-plus-lg"></i>
                         افزودن آیتم جدید
                     </button>
@@ -1040,18 +970,12 @@
 
                 <div class="form-actions">
 
-                    <a
-                        href="{{ route('admin.services.index') }}"
-                        class="btn-back"
-                    >
+                    <a href="{{ route('admin.services.index') }}" class="btn-back">
                         <i class="bi bi-arrow-right"></i>
                         بازگشت
                     </a>
 
-                    <button
-                        type="submit"
-                        class="btn-submit"
-                    >
+                    <button type="submit" class="btn-submit">
                         <i class="bi bi-check-lg"></i>
                         {{ $service->exists ? 'ذخیره تغییرات' : 'ثبت خدمت' }}
                     </button>
@@ -1123,7 +1047,7 @@
                 return;
             }
 
-            input.addEventListener('input', function () {
+            input.addEventListener('input', function() {
 
                 previewSvg(
                     input,
@@ -1162,7 +1086,7 @@
                 return;
             }
 
-            input.addEventListener('input', function () {
+            input.addEventListener('input', function() {
 
                 previewSvg(
                     input,
@@ -1183,7 +1107,7 @@
 
             document
                 .querySelectorAll('.item-icon-input')
-                .forEach(function (input) {
+                .forEach(function(input) {
 
                     initItemIconPreview(input);
 
@@ -1195,7 +1119,7 @@
 
             document
                 .querySelectorAll('#itemsContainer .item-card')
-                .forEach(function (item, index) {
+                .forEach(function(item, index) {
 
                     const number = item.querySelector(
                         '.item-number'
@@ -1529,5 +1453,16 @@
         initAllItemIconPreviews();
 
         updateItemNumbers();
+        document.getElementById('serviceImageInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+
+            if (!file) return;
+
+            const preview = document.getElementById('serviceImagePreview');
+            const wrapper = document.getElementById('serviceImagePreviewWrapper');
+
+            preview.src = URL.createObjectURL(file);
+            wrapper.style.display = 'block';
+        });
     </script>
 @endsection

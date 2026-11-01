@@ -19,6 +19,8 @@ return new class extends Migration
             $table->longText('icon');
             $table->text('description');
 
+            $table->string('image')->nullable();
+
             $table->unsignedInteger('projects_count')->default(0);
             $table->unsignedInteger('brands_count')->default(0);
             $table->unsignedInteger('experience_years')->default(0);

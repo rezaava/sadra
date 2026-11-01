@@ -50,7 +50,7 @@
                     مهندسی، نگاه خلاق و شناخت واقعی از صنعت بسته‌بندی طراحی می‌کند؛ از اولین ایده تا خطی که روی تولید اجرا
                     می‌شود.</p>
                 <div class="hero-buttons">
-                    <a href="#work" class="btn-primary">دیدن نمونه‌کارها</a>
+                    <a href="#work" class="btn-primary">دیدن محصولات</a>
                     <a href="#contact" class="btn-ghost">شروع گفتگو</a>
                 </div>
             </div>
@@ -296,7 +296,7 @@
 
         <div class="wrap">
             <div class="section-head reveal">
-                <h2>نمونه‌کارها</h2>
+                <h2>محصولات</h2>
                 <p class="section-note">گزیده‌ای از حوزه‌هایی که صدرا در آن‌ها بسته‌بندی طراحی کرده است.</p>
             </div>
 

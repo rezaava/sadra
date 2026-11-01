@@ -3,6 +3,30 @@
 @section('head')
     <title>خدمات ما | صدرا</title>
     <link rel="stylesheet" href="{{ asset('asset/css/services.css') }}">
+    <style>
+        .svc-banner-image {
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: relative;
+            isolation: isolate;
+        }
+
+        .svc-banner-image::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg,
+                    rgba(16, 14, 44, 0.88),
+                    rgba(16, 14, 44, 0.55));
+            z-index: -1;
+        }
+
+        .svc-banner-image .svc-banner-inner {
+            position: relative;
+            z-index: 1;
+        }
+    </style>
 @endsection
 
 @section('main')
@@ -10,56 +34,86 @@
     @php
         $serviceItems = $service->items;
     @endphp
+    @if ($service->image)
+        <section class="svc-banner svc-banner-image" style="background-image: url('{{ asset($service->image) }}')">
 
-    <section class="svc-banner">
-        <div class="svc-banner-icons" aria-hidden="true">
-            <svg viewBox="0 0 34 34">
-                <path d="M17 4 L30 12 L17 20 L4 12 Z" fill="none" stroke-width="1.2"/>
-            </svg>
+            <div class="wrap svc-banner-inner">
+                <p class="breadcrumb">
+                    <a href="{{ route('home') }}">خانه</a>
+                    <span class="sep">/</span>
+                    <span class="current">خدمات</span>
+                </p>
 
-            <svg viewBox="0 0 34 34">
-                <circle cx="17" cy="17" r="12" fill="none" stroke-width="1.2"/>
-            </svg>
+                <span class="svc-banner-eyebrow">
+                    SADRA. — SERVICES
+                </span>
 
-            <svg viewBox="0 0 34 34">
-                <rect x="4" y="4" width="26" height="26" fill="none" stroke-width="1.2"/>
-            </svg>
-        </div>
+                <h1 class="svc-banner-title">
+                    {{ $service->name }}
+                </h1>
 
-        <div class="wrap svc-banner-inner">
+                <p class="svc-banner-lede">
+                    {{ $service->description }}
+                </p>
 
-            <p class="breadcrumb">
-                <a href="{{ route('home') }}">خانه</a>
-                <span class="sep">/</span>
-                <span class="current">خدمات</span>
-            </p>
+                <nav class="svc-chip-nav">
+                    @foreach ($serviceItems as $item)
+                        <a class="svc-chip" href="#svc-{{ $item->id }}">
+                            <b>{{ sprintf('%02d', $item->number) }}</b>
+                            {{ $item->title }}
+                        </a>
+                    @endforeach
+                </nav>
+            </div>
+        </section>
+    @else
+        <section class="svc-banner">
+            <div class="svc-banner-icons" aria-hidden="true">
+                <svg viewBox="0 0 34 34">
+                    <path d="M17 4 L30 12 L17 20 L4 12 Z" fill="none" stroke-width="1.2" />
+                </svg>
 
-            <span class="svc-banner-eyebrow">
-                SADRA. — SERVICES
-            </span>
+                <svg viewBox="0 0 34 34">
+                    <circle cx="17" cy="17" r="12" fill="none" stroke-width="1.2" />
+                </svg>
 
-            <h1 class="svc-banner-title">
-                {{ $service->name }}
-            </h1>
+                <svg viewBox="0 0 34 34">
+                    <rect x="4" y="4" width="26" height="26" fill="none" stroke-width="1.2" />
+                </svg>
+            </div>
 
-            <p class="svc-banner-lede">
-                {{ $service->description }}
-            </p>
+            <div class="wrap svc-banner-inner">
 
-            <nav class="svc-chip-nav">
-                @foreach($serviceItems as $item)
-                    <a
-                        class="svc-chip"
-                        href="#svc-{{ $item->id }}"
-                    >
-                        <b>{{ sprintf('%02d', $item->number) }}</b>
-                        {{ $item->title }}
-                    </a>
-                @endforeach
-            </nav>
+                <p class="breadcrumb">
+                    <a href="{{ route('home') }}">خانه</a>
+                    <span class="sep">/</span>
+                    <span class="current">خدمات</span>
+                </p>
 
-        </div>
-    </section>
+                <span class="svc-banner-eyebrow">
+                    SADRA. — SERVICES
+                </span>
+
+                <h1 class="svc-banner-title">
+                    {{ $service->name }}
+                </h1>
+
+                <p class="svc-banner-lede">
+                    {{ $service->description }}
+                </p>
+
+                <nav class="svc-chip-nav">
+                    @foreach ($serviceItems as $item)
+                        <a class="svc-chip" href="#svc-{{ $item->id }}">
+                            <b>{{ sprintf('%02d', $item->number) }}</b>
+                            {{ $item->title }}
+                        </a>
+                    @endforeach
+                </nav>
+
+            </div>
+        </section>
+    @endif
 
     <section class="svc-explorer">
         <div class="wrap svc-explorer-grid">
@@ -70,11 +124,8 @@
                 </p>
 
                 <nav class="svc-rail-nav">
-                    @foreach($serviceItems as $item)
-                        <a
-                            href="#svc-{{ $item->id }}"
-                            data-target="svc-{{ $item->id }}"
-                        >
+                    @foreach ($serviceItems as $item)
+                        <a href="#svc-{{ $item->id }}" data-target="svc-{{ $item->id }}">
                             <span>
                                 {{ sprintf('%02d', $item->number) }}
                             </span>
@@ -89,13 +140,9 @@
 
             <div class="svc-rows">
 
-                @foreach($serviceItems as $item)
-
-                    <article
-                        class="svc-row"
-                        id="svc-{{ $item->id }}"
-                        data-index="{{ sprintf('%02d', $item->number) }}"
-                    >
+                @foreach ($serviceItems as $item)
+                    <article class="svc-row" id="svc-{{ $item->id }}"
+                        data-index="{{ sprintf('%02d', $item->number) }}">
 
                         <span class="svc-row-num">
                             {{ sprintf('%02d', $item->number) }}
@@ -115,9 +162,9 @@
                                 {{ $item->text }}
                             </p>
 
-                            @if($item->tags->isNotEmpty())
+                            @if ($item->tags->isNotEmpty())
                                 <div class="svc-tags">
-                                    @foreach($item->tags as $tag)
+                                    @foreach ($item->tags as $tag)
                                         <span class="svc-tag">
                                             {{ $tag->name }}
                                         </span>
@@ -128,7 +175,6 @@
                         </div>
 
                     </article>
-
                 @endforeach
 
             </div>
@@ -142,10 +188,7 @@
             <div class="impact-bar">
 
                 <div class="impact-item">
-                    <span
-                        class="impact-num"
-                        data-count="{{ $service->projects_count }}"
-                    >
+                    <span class="impact-num" data-count="{{ $service->projects_count }}">
                         <span class="suffix">+</span>
                     </span>
 
@@ -155,10 +198,7 @@
                 </div>
 
                 <div class="impact-item">
-                    <span
-                        class="impact-num"
-                        data-count="{{ $service->brands_count }}"
-                    >
+                    <span class="impact-num" data-count="{{ $service->brands_count }}">
                         <span class="suffix">+</span>
                     </span>
 
@@ -168,10 +208,7 @@
                 </div>
 
                 <div class="impact-item">
-                    <span
-                        class="impact-num"
-                        data-count="{{ $service->experience_years }}"
-                    >
+                    <span class="impact-num" data-count="{{ $service->experience_years }}">
                         <span class="suffix"></span>
                     </span>
 
@@ -181,10 +218,7 @@
                 </div>
 
                 <div class="impact-item">
-                    <span
-                        class="impact-num"
-                        data-count="{{ $service->industries_count }}"
-                    >
+                    <span class="impact-num" data-count="{{ $service->industries_count }}">
                         <span class="suffix">+</span>
                     </span>
 
@@ -212,17 +246,11 @@
                     <div class="cta-copy reveal">
 
                         <span class="cta-badge">
-                            <svg
-                                viewBox="0 0 24 24"
-                                width="16"
-                                height="16"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="1.8"
-                            >
-                                <path d="M12 3 L21 8 L12 13 L3 8 Z"/>
-                                <path d="M3 8 L3 16 L12 21 L21 16 L21 8"/>
-                                <path d="M12 13 L12 21"/>
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                                stroke-width="1.8">
+                                <path d="M12 3 L21 8 L12 13 L3 8 Z" />
+                                <path d="M3 8 L3 16 L12 21 L21 16 L21 8" />
+                                <path d="M12 13 L12 21" />
                             </svg>
 
                             آماده همکاری با برند شما
@@ -238,39 +266,19 @@
                             برای گفتگو درباره بسته‌بندی محصول‌تان، با تیم صدرا در تماس باشید.
                         </p>
 
-                        <a
-                            href="mailto:SadraPacking@gmail.com"
-                            class="btn-primary cta-btn"
-                        >
+                        <a href="mailto:SadraPacking@gmail.com" class="btn-primary cta-btn">
                             شروع گفتگو
                         </a>
 
                     </div>
 
-                    <div
-                        class="cta-contacts reveal"
-                        style="--d:0.15s"
-                    >
+                    <div class="cta-contacts reveal" style="--d:0.15s">
 
-                        <a
-                            class="cta-contact-row"
-                            href="mailto:SadraPacking@gmail.com"
-                        >
+                        <a class="cta-contact-row" href="mailto:SadraPacking@gmail.com">
                             <span class="cta-ic">
-                                <svg
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    stroke-width="1.6"
-                                >
-                                    <rect
-                                        x="3"
-                                        y="5"
-                                        width="18"
-                                        height="14"
-                                        rx="2"
-                                    />
-                                    <path d="M3 7 L12 13 L21 7"/>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                                    <rect x="3" y="5" width="18" height="14" rx="2" />
+                                    <path d="M3 7 L12 13 L21 7" />
                                 </svg>
                             </span>
 
@@ -279,18 +287,10 @@
                             </span>
                         </a>
 
-                        <a
-                            class="cta-contact-row"
-                            href="tel:+989130032144"
-                        >
+                        <a class="cta-contact-row" href="tel:+989130032144">
                             <span class="cta-ic">
-                                <svg
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    stroke-width="1.6"
-                                >
-                                    <path d="M4 5c0 8.5 6.5 15 15 15l2-4-6-2-2 2c-3-1.5-5-3.5-6.5-6.5l2-2-2-6z"/>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                                    <path d="M4 5c0 8.5 6.5 15 15 15l2-4-6-2-2 2c-3-1.5-5-3.5-6.5-6.5l2-2-2-6z" />
                                 </svg>
                             </span>
 
@@ -301,18 +301,9 @@
 
                         <div class="cta-contact-row static">
                             <span class="cta-ic">
-                                <svg
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    stroke-width="1.6"
-                                >
-                                    <path d="M12 21s7-6.5 7-12a7 7 0 1 0-14 0c0 5.5 7 12 7 12z"/>
-                                    <circle
-                                        cx="12"
-                                        cy="9"
-                                        r="2.4"
-                                    />
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                                    <path d="M12 21s7-6.5 7-12a7 7 0 1 0-14 0c0 5.5 7 12 7 12z" />
+                                    <circle cx="12" cy="9" r="2.4" />
                                 </svg>
                             </span>
 

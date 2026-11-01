@@ -7,6 +7,7 @@ use App\Models\Service;
 use App\Models\ServiceCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class ServiceController extends Controller
 {
@@ -25,10 +26,25 @@ class ServiceController extends Controller
         $categories = ServiceCategory::orderBy('name')->get();
 
         return view('admin.services.form', [
-            'service' => new Service(),
+            'service' => new Service,
             'categories' => $categories,
             'pageTitle' => 'افزودن خدمت',
         ]);
+    }
+
+    private function uploadImage($file)
+    {
+        $directory = ('uploads/services');
+
+        if (! file_exists($directory)) {
+            mkdir($directory, 0755, true);
+        }
+
+        $filename = Str::uuid().'.'.$file->getClientOriginalExtension();
+
+        $file->move($directory, $filename);
+
+        return 'uploads/services/'.$filename;
     }
 
     public function store(Request $request)
@@ -37,6 +53,7 @@ class ServiceController extends Controller
             'service_category_id' => ['required', 'exists:service_categories,id'],
             'name' => ['required', 'string', 'max:255'],
             'icon' => ['required', 'string'],
+            'image' => ['nullable'],
             'description' => ['required', 'string'],
 
             'projects_count' => ['required', 'integer', 'min:0'],
@@ -51,20 +68,17 @@ class ServiceController extends Controller
             'items.*.text' => ['nullable', 'string'],
             'items.*.tags' => ['nullable', 'array'],
             'items.*.tags.*' => ['nullable', 'string', 'max:255'],
-        ], [
-            'service_category_id.required' => 'دسته‌بندی خدمت الزامی است.',
-            'service_category_id.exists' => 'دسته‌بندی انتخاب‌شده معتبر نیست.',
-            'name.required' => 'نام خدمت الزامی است.',
-            'icon.required' => 'آیکن خدمت الزامی است.',
-            'description.required' => 'توضیحات خدمت الزامی است.',
         ]);
 
-        DB::transaction(function () use ($validated) {
+        DB::transaction(function () use ($validated, $request) {
 
             $service = Service::create([
                 'service_category_id' => $validated['service_category_id'],
                 'name' => $validated['name'],
                 'icon' => $validated['icon'],
+                'image' => $request->hasFile('image')
+                    ? $this->uploadImage($request->file('image'))
+                    : null,
                 'description' => $validated['description'],
                 'projects_count' => $validated['projects_count'],
                 'brands_count' => $validated['brands_count'],
@@ -72,10 +86,7 @@ class ServiceController extends Controller
                 'industries_count' => $validated['industries_count'],
             ]);
 
-            $this->syncItems(
-                $service,
-                $validated['items'] ?? []
-            );
+            $this->syncItems($service, $validated['items'] ?? []);
         });
 
         return redirect()
@@ -105,6 +116,7 @@ class ServiceController extends Controller
             'service_category_id' => ['required', 'exists:service_categories,id'],
             'name' => ['required', 'string', 'max:255'],
             'icon' => ['required', 'string'],
+            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
             'description' => ['required', 'string'],
 
             'projects_count' => ['required', 'integer', 'min:0'],
@@ -119,17 +131,11 @@ class ServiceController extends Controller
             'items.*.text' => ['nullable', 'string'],
             'items.*.tags' => ['nullable', 'array'],
             'items.*.tags.*' => ['nullable', 'string', 'max:255'],
-        ], [
-            'service_category_id.required' => 'دسته‌بندی خدمت الزامی است.',
-            'service_category_id.exists' => 'دسته‌بندی انتخاب‌شده معتبر نیست.',
-            'name.required' => 'نام خدمت الزامی است.',
-            'icon.required' => 'آیکن خدمت الزامی است.',
-            'description.required' => 'توضیحات خدمت الزامی است.',
         ]);
 
-        DB::transaction(function () use ($validated, $service) {
+        DB::transaction(function () use ($validated, $service, $request) {
 
-            $service->update([
+            $data = [
                 'service_category_id' => $validated['service_category_id'],
                 'name' => $validated['name'],
                 'icon' => $validated['icon'],
@@ -138,7 +144,18 @@ class ServiceController extends Controller
                 'brands_count' => $validated['brands_count'],
                 'experience_years' => $validated['experience_years'],
                 'industries_count' => $validated['industries_count'],
-            ]);
+            ];
+
+            if ($request->hasFile('image')) {
+
+                if ($service->image && file_exists(($service->image))) {
+                    unlink(($service->image));
+                }
+
+                $data['image'] = $this->uploadImage($request->file('image'));
+            }
+
+            $service->update($data);
 
             $service->items()->each(function ($item) {
                 $item->tags()->delete();
@@ -146,10 +163,7 @@ class ServiceController extends Controller
 
             $service->items()->delete();
 
-            $this->syncItems(
-                $service,
-                $validated['items'] ?? []
-            );
+            $this->syncItems($service, $validated['items'] ?? []);
         });
 
         return redirect()
@@ -159,6 +173,10 @@ class ServiceController extends Controller
 
     public function destroy(Service $service)
     {
+        if ($service->image && file_exists(($service->image))) {
+            unlink(($service->image));
+        }
+
         $service->delete();
 
         return redirect()
